@@ -21,8 +21,8 @@
   <dependencies>
     <dependency>
       <groupId>io.daex.sdk</groupId>
-      <artifactId>sdk-core</artifactId>
-      <version>0.1.1</version>
+      <artifactId>daex-java-sdk-core</artifactId>
+      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
