@@ -6,7 +6,7 @@
 
   <groupId>io.daex.api.wallet</groupId>
   <artifactId>daex-wallet-api-sdk</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <name>daex-wallet-api-sdk</name>
   <!-- FIXME change it to the project's website -->
