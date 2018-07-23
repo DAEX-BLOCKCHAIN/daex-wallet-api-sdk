@@ -26,6 +26,8 @@ public class WalletAddressRequest {
      */
     private Integer addressCount;
 
+    private String memo;
+
     public String getPayAccount() {
         return payAccount;
     }
@@ -56,5 +58,13 @@ public class WalletAddressRequest {
 
     public void setAddressCount(Integer addressCount) {
         this.addressCount = addressCount;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
     }
 }

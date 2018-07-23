@@ -49,6 +49,7 @@ public class WithdrawRequest {
      */
     private String noticeURL;
 
+    private String memo;
 
     public String getWithdrawAccount() {
         return withdrawAccount;
@@ -128,5 +129,13 @@ public class WithdrawRequest {
 
     public void setNoticeURL(String noticeURL) {
         this.noticeURL = noticeURL;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
     }
 }

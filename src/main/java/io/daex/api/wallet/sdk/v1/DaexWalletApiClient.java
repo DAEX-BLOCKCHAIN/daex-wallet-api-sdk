@@ -38,6 +38,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {Integer} data.addressCount 创建的地址数量
      * @apiSuccess {List} data.addressList 地址集合
      * @apiSuccess {Integer} data.useAddressCount 可用地址数量
+     * @apiSuccess {String} data.memo 地址标签集
      *
      */
     public ServiceCall<BaseResponse.WalletAddressResponse> walletAddress(WalletAddressRequest walletAddressRequest) {
@@ -214,6 +215,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiParam {String} withdrawAddress 提现地址
      * @apiParam {BigDecimal} withdrawAmount 提现金额
      * @apiParam {String} [remark] 备注
+     * @apiParam {String} [memo] 提现标签集
      *
      *
      * @apiSuccess {String} status 请求返回状态
@@ -254,6 +256,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiParam {String} noticeURL 通知地址
      * @apiParam {BigDecimal} withdrawAmount 提现金额
      * @apiParam {String} [remark] 备注
+     * @apiParam {String} [memo] 提现标签集
      *
      * @apiSuccess {String} status 请求返回状态
      * @apiSuccess {String} message 请求返回提示信息
