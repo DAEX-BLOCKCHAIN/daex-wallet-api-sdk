@@ -44,12 +44,9 @@ public class WithdrawRequest {
      */
     private String bizNumber;
 
-    /**
-     * 通知地址
-     */
-    private String noticeURL;
-
     private String memo;
+
+    private String operation;
 
     public String getWithdrawAccount() {
         return withdrawAccount;
@@ -123,19 +120,19 @@ public class WithdrawRequest {
         this.bizNumber = bizNumber;
     }
 
-    public String getNoticeURL() {
-        return noticeURL;
-    }
-
-    public void setNoticeURL(String noticeURL) {
-        this.noticeURL = noticeURL;
-    }
-
     public String getMemo() {
         return memo;
     }
 
     public void setMemo(String memo) {
         this.memo = memo;
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 }

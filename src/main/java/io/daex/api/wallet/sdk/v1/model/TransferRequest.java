@@ -49,11 +49,6 @@ public class TransferRequest {
     private String shareAccounts;
 
     /**
-     * 通知地址
-     */
-    private String noticeURL;
-
-    /**
      * 外部流水号
      */
     private String outNumber;
@@ -62,7 +57,6 @@ public class TransferRequest {
      * 备注
      */
     private String remark;
-
 
     public String getPayAccount() {
         return payAccount;
@@ -126,14 +120,6 @@ public class TransferRequest {
 
     public void setShareAccounts(String shareAccounts) {
         this.shareAccounts = shareAccounts;
-    }
-
-    public String getNoticeURL() {
-        return noticeURL;
-    }
-
-    public void setNoticeURL(String noticeURL) {
-        this.noticeURL = noticeURL;
     }
 
     public String getOutNumber() {

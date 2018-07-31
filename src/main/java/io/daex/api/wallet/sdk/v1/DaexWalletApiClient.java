@@ -173,7 +173,6 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiParam {String} receAccount 收款人账户
      * @apiParam {String} payAmount 付款金额
      * @apiParam {String} payTime 付款时间
-     * @apiParam {String} noticeURL 通知地址，与通知白名单中登记URL比对
      * @apiParam {String} outNumber 外部流水号
      * @apiParam {String} [isShare] 是否分润（暂时不提供该功能）
      * @apiParam {String} [shareAccounts] 分润账户集（暂时不提供该功能）
@@ -196,7 +195,7 @@ public class DaexWalletApiClient extends DaexClient {
                         , "payPattern", transferRequest.getPayPattern(), "receAccount", transferRequest.getReceAccount()
                         , "payAmount", transferRequest.getPayAmount(), "payTime", transferRequest.getPayTime()
                         , "isShare", transferRequest.getIsShare(), "share", transferRequest.getShareAccounts()
-                        , "noticeURL", transferRequest.getNoticeURL(), "outNumber", transferRequest.getOutNumber()
+                        , "outNumber", transferRequest.getOutNumber()
                         , "remark", transferRequest.getRemark());
         return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.TransferResponse.class));
     }
@@ -253,8 +252,9 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiParam {String} outNumber 外部流水号
      * @apiParam {String} withdrawAddress 提现地址
      * @apiParam {String} bizNumber 提现流水号
-     * @apiParam {String} noticeURL 通知地址
      * @apiParam {BigDecimal} withdrawAmount 提现金额
+     * @apiParam {String} operation 提现操作
+     * <table><tr><th>提现操作</th><th>描述</th></tr><tr><td>01</td><td>确认</td></tr><tr><td>02</td><td>撤销</td></tr></table>
      * @apiParam {String} [remark] 备注
      * @apiParam {String} [memo] 提现标签集
      *
@@ -275,7 +275,7 @@ public class DaexWalletApiClient extends DaexClient {
                         , "payPattern", withdrawRequest.getWithdrawPattern(), "putAddress", withdrawRequest.getWithdrawAddress()
                         , "putAmount", withdrawRequest.getWithdrawAmount(), "payTime", withdrawRequest.getWithdrawTime()
                         , "outNumber", withdrawRequest.getOutNumber(), "remark", withdrawRequest.getRemark()
-                        , "noticeURL", withdrawRequest.getNoticeURL(), "bizNumber", withdrawRequest.getBizNumber());
+                        , "operation", withdrawRequest.getOperation(), "bizNumber", withdrawRequest.getBizNumber());
         return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.WithdrawResponse.class));
     }
 
