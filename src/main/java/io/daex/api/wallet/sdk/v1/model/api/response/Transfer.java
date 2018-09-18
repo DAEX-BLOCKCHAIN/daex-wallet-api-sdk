@@ -1,16 +1,35 @@
-package io.daex.api.wallet.sdk.v1.model;
+package io.daex.api.wallet.sdk.v1.model.api.response;
 
-import java.math.BigDecimal;
-import java.util.Date;
 
-/**
- * Created by qingyun.yu on 2018/7/14.
- */
-public class Transfer {
+import java.io.Serializable;
+
+
+public class Transfer implements Serializable {
+
+    private static final long serialVersionUID = 5210011969463732998L;
+    /**
+     * 转账流水号
+     */
     private String bizNumber;
+
+    /**
+     * 外部流水号
+     */
     private String outNumber;
+
+    /**
+     * 交易状态
+     */
     private String status;
-    private BigDecimal accountAmount;
+
+    /**
+     * 说明
+     */
+    private String describe;
+
+    /**
+     * 交易完成时间
+     */
     private String sucTime;
 
     public String getBizNumber() {
@@ -37,12 +56,12 @@ public class Transfer {
         this.status = status;
     }
 
-    public BigDecimal getAccountAmount() {
-        return accountAmount;
+    public String getDescribe() {
+        return describe;
     }
 
-    public void setAccountAmount(BigDecimal accountAmount) {
-        this.accountAmount = accountAmount;
+    public void setDescribe(String describe) {
+        this.describe = describe;
     }
 
     public String getSucTime() {

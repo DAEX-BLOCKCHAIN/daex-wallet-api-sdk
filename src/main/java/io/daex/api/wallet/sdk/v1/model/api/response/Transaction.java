@@ -1,11 +1,13 @@
-package io.daex.api.wallet.sdk.v1.model;
+package io.daex.api.wallet.sdk.v1.model.api.response;
 
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-/**
- * Created by qingyun.yu on 2018/7/12.
- */
-public class Transaction {
+
+public class Transaction implements Serializable {
+
+    private static final long serialVersionUID = -3739895872642613043L;
 
     /**
      * 流水号
@@ -16,19 +18,17 @@ public class Transaction {
      */
     private String outsideSerialNumber;
     /**
-     * 交易结果
+     * 交易状态
      */
-    private Integer transactionResult;
+    private String status;
     /**
      * 交易类型
      */
     private Integer transactionType;
-
     /**
      * 交易完成时间
      */
     private String transactionTime;
-
     /**
      * 交易时间戳
      */
@@ -36,15 +36,15 @@ public class Transaction {
     /**
      * 交易哈希
      */
-    private String transactionHash;
+    private String txHash;
     /**
      * 出账方
      */
-    private String transferOut;
+    private String sender;
     /**
      * 入账方
      */
-    private String transferInto;
+    private String recipients;
     /**
      * 交易资产
      */
@@ -90,13 +90,6 @@ public class Transaction {
         this.outsideSerialNumber = outsideSerialNumber;
     }
 
-    public Integer getTransactionResult() {
-        return transactionResult;
-    }
-
-    public void setTransactionResult(Integer transactionResult) {
-        this.transactionResult = transactionResult;
-    }
 
     public Integer getTransactionType() {
         return transactionType;
@@ -122,28 +115,36 @@ public class Transaction {
         this.transactionTimestamp = transactionTimestamp;
     }
 
-    public String getTransactionHash() {
-        return transactionHash;
+    public String getStatus() {
+        return status;
     }
 
-    public void setTransactionHash(String transactionHash) {
-        this.transactionHash = transactionHash;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getTransferOut() {
-        return transferOut;
+    public String getTxHash() {
+        return txHash;
     }
 
-    public void setTransferOut(String transferOut) {
-        this.transferOut = transferOut;
+    public void setTxHash(String txHash) {
+        this.txHash = txHash;
     }
 
-    public String getTransferInto() {
-        return transferInto;
+    public String getSender() {
+        return sender;
     }
 
-    public void setTransferInto(String transferInto) {
-        this.transferInto = transferInto;
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public String getRecipients() {
+        return recipients;
+    }
+
+    public void setRecipients(String recipients) {
+        this.recipients = recipients;
     }
 
     public String getAssetCode() {
@@ -201,4 +202,5 @@ public class Transaction {
     public void setBlockTime(String blockTime) {
         this.blockTime = blockTime;
     }
+
 }

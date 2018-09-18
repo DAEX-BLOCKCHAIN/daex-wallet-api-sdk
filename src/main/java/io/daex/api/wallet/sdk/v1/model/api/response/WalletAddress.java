@@ -1,12 +1,22 @@
-package io.daex.api.wallet.sdk.v1.model;
+package io.daex.api.wallet.sdk.v1.model.api.response;
 
+
+
+
+import io.daex.api.wallet.sdk.v1.model.api.entity.AddressEntity;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * Created by qingyun.yu on 2018/7/12.
- */
-public class WalletAddress {
+
+public class WalletAddress implements Serializable {
+
+    private static final long serialVersionUID = -3739895872642613043L;
+    /**
+     * 用户账号
+     */
+    private String account;
     /**
      * 账户余额（DAX）
      */
@@ -29,12 +39,15 @@ public class WalletAddress {
     /**
      * 地址集合
      */
-    private List<String> addressList;
+    private List<AddressEntity> addressData;
 
-    /**
-     * 可用地址数量
-     */
-    private Integer useAddressCount;
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
 
     public BigDecimal getAccountBalance() {
         return accountBalance;
@@ -68,19 +81,11 @@ public class WalletAddress {
         this.addressCount = addressCount;
     }
 
-    public List<String> getAddressList() {
-        return addressList;
+    public List<AddressEntity> getAddressData() {
+        return addressData;
     }
 
-    public void setAddressList(List<String> addressList) {
-        this.addressList = addressList;
-    }
-
-    public Integer getUseAddressCount() {
-        return useAddressCount;
-    }
-
-    public void setUseAddressCount(Integer useAddressCount) {
-        useAddressCount = useAddressCount;
+    public void setAddressData(List<AddressEntity> addressData) {
+        this.addressData = addressData;
     }
 }
