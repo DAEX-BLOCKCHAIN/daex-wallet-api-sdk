@@ -1,6 +1,11 @@
 package io.daex.api.wallet.sdk.v1;
 
-import io.daex.api.wallet.sdk.v1.model.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import io.daex.api.wallet.sdk.v1.model.api.request.*;
+import io.daex.api.wallet.sdk.v1.model.api.response.BaseResponse;
+import io.daex.api.wallet.sdk.v1.util.SecrityUtil;
 import io.daex.sdk.core.client.DaexClient;
 import io.daex.sdk.core.http.RequestBuilder;
 import io.daex.sdk.core.http.ServiceCall;
@@ -23,30 +28,28 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiGroup Wallet
      * @apiVersion 1.0.0
      *
-     * @apiParam {String} assetCode  数字货币缩写（如：BTC）
-     * @apiParam {String} payAccount 付款账户
-     * @apiParam {Integer{1-100}} addressCount   创建的地址数量
-     * @apiParam {String=1,2} addressType    创建地址类型
-     * <table><tr><th>地址类型</th><th>描述</th></tr><tr><td>1</td><td>充值</td></tr><tr><td>2</td><td>其他</td></tr></table>
+     * @apiParam {String} assetCode  资产类型,数字货币缩写（如：BTC）
+     * @apiParam {String} account 付款账户
+     * @apiParam {Integer{1-1000}} addressCount=100   创建的地址数量
      *
      * @apiSuccess {String} status 请求返回状态
      * @apiSuccess {String} message 请求返回提示信息
      * @apiSuccess {Object} data 请求返回信息
-     * @apiSuccess {BigDecimal} data.accountBalance 账户余额(DAX)
-     * @apiSuccess {BigDecimal} data.cost 消耗的DAX数量（计算公式：addressCount*10）
-     * @apiSuccess {String} data.assetCode 数字货币缩写（如：BTC）
-     * @apiSuccess {Integer} data.addressCount 创建的地址数量
-     * @apiSuccess {List} data.addressList 地址集合
-     * @apiSuccess {Integer} data.useAddressCount 可用地址数量
-     * @apiSuccess {String} data.memo 地址标签集
+     * @apiSuccess {String} data.account 用户账户
+     * @apiSuccess {BigDecimal} data.accountBalance 账户DAX余额
+     * @apiSuccess {BigDecimal} data.cost 创建费用，消耗的DAX数量
+     * @apiSuccess {String} data.assetCode 资产类型，数字货币缩写（如：BTC）
+     * @apiSuccess {Integer} data.addressCount 新建的地址数量
+     * @apiSuccess {List} data.addressData 地址信息列表
+     * @apiSuccess {String} data.addressData.address 新增地址
+     * @apiSuccess {String} data.addressData.memo 地址标签
      *
      */
     public ServiceCall<BaseResponse.WalletAddressResponse> walletAddress(WalletAddressRequest walletAddressRequest) {
         String[] pathSegments = {BASE_URL, "walletAddress"};
-        RequestBuilder builder = RequestBuilder.post(RequestBuilder.constructHttpUrl(getEndPoint(), pathSegments));
-        builder.form("assetCode", walletAddressRequest.getAssetCode(), "payAccount", walletAddressRequest.getPayAccount()
-                , "addressCount", walletAddressRequest.getAddressCount(), "addressType", walletAddressRequest.getAddressType());
-        return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.WalletAddressResponse.class));
+        RequestBuilder builder = RequestBuilder.post(RequestBuilder.constructHttpUrl(getEndPoint(), pathSegments))
+                .bodyJson(new Gson().toJsonTree(walletAddressRequest).getAsJsonObject());
+        return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.WalletAddressResponse.class), builder.getJsonBody());
     }
 
     /**
@@ -54,24 +57,26 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiGroup Wallet
      * @apiVersion 1.0.0
      *
-     * @apiParam {String} payAccount    用户账户
-     * @apiParam {String} [assetCode]   数字货币缩写（如：BTC）
+     * @apiParam {String} account    用户账户，用户名或注册邮箱（清算链地址），主账户有权查询子账户资产
+     * @apiParam {String} [assetCode]   数字货币缩写（如：BTC），默认为所有资产，若填写，多个资产以"|"分隔
      *
      * @apiSuccess {String} status 请求返回状态
      * @apiSuccess {String} message 请求返回提示信息
      * @apiSuccess {Object} data 请求返回信息
      * @apiSuccess {String} data.account 用户账户
-     * @apiSuccess {String} data.assetCode 数字货币缩写（如：BTC）
-     * @apiSuccess {BigDecimal} data.assetAmt 资产数量
-     * @apiSuccess {BigDecimal} data.freezeAmt 冻结资产数量
-     * @apiSuccess {BigDecimal} data.usableAmt 可用资产数量
+     * @apiSuccess {String} data.dateTime 查询时间
+     * @apiSuccess {List} data.assetData 资产信息列表
+     * @apiSuccess {String} data.assetData.assetCode 数字货币缩写（如：BTC）
+     * @apiSuccess {BigDecimal} data.assetData.assetAmt 总资产数量
+     * @apiSuccess {BigDecimal} data.assetData.freezeAmt 冻结资产数量
+     * @apiSuccess {BigDecimal} data.assetData.usableAmt 可用资产数量
      *
      */
     public ServiceCall<BaseResponse.BalancesResponse> balanceStatistical(BalanceRequest balanceRequest) {
         String[] pathSegments = {BASE_URL, "getBalance"};
         RequestBuilder builder = RequestBuilder.get(RequestBuilder.constructHttpUrl(getEndPoint(), pathSegments))
-                .query("assetCode", balanceRequest.getAssetCode(), "payAccount", balanceRequest.getPayAccount());
-        return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.BalancesResponse.class));
+                .query("account", balanceRequest.getAccount(), "assetCode", balanceRequest.getAssetCode());
+        return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.BalancesResponse.class), builder.getJsonBody());
     }
 
     /**
@@ -79,40 +84,44 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiGroup Wallet
      * @apiVersion 1.0.0
      *
-     * @apiParam {String} assetCode   数字货币缩写（如：BTC）
-     * @apiParam {Integer=1,2,3} tranType 交易类型
-     * <table><tr><th>交易类型</th><th>描述</th></tr><tr><td>1</td><td>充值</td></tr><tr><td>2</td><td>提现</td></tr><tr><td>3</td><td>转账</td></tr></table>
-     * @apiParam {String} [outsideSerialNumber]    外部流水号即用户生成的流水号（与serialNumber选填一种）
-     * @apiParam {String} [serialNumber]    由清算链生成的交易流水号（与outsideSerialNumber选填一种）
+     * @apiParam {String} account   用户账户
+     * @apiParam {String} serialNumber    交易流水号
      *
      * @apiSuccess {String} status 请求返回状态
      * @apiSuccess {String} message 请求返回提示信息
      * @apiSuccess {Object} data 请求返回信息
-     * @apiSuccess {String} data.serialNumber 流水号
+     * @apiSuccess {String} data.serialNumber 交易流水号
      * @apiSuccess {String} data.outsideSerialNumber 外部流水号
-     * @apiSuccess {Integer} data.transactionResult 交易结果
-     * <table><tr><th>交易结果</th><th>描述</th></tr><tr><td>1</td><td>交易完成</td></tr><tr><td>2</td><td>待处理</td></tr><tr><td>3</td><td>交易失败</td></tr><tr><td>4</td><td>交易不存在</td></tr></table>
+     * @apiSuccess {String} data.status 交易状态
+     * <table><tr><th>交易状态</th><th>描述</th></tr>
+     * <tr><td>01</td><td>交易完成</td></tr>
+     * <tr><td>02</td><td>交易待处理</td></tr>
+     * <tr><td>03</td><td>交易失败</td></tr>
+     * <tr><td>04</td><td>提现待确认</td></tr>
+     * <tr><td>05</td><td>提现撤销</td></tr></table>
      * @apiSuccess {Integer} data.transactionType 交易类型
-     * <table><tr><th>交易类型</th><th>描述</th></tr><tr><td>1</td><td>充值</td></tr><tr><td>2</td><td>提现</td></tr><tr><td>3</td><td>转账</td></tr></table>
+     * <table><tr><th>交易类型</th><th>描述</th></tr>
+     * <tr><td>1</td><td>充值</td></tr>
+     * <tr><td>2</td><td>提现</td></tr>
+     * <tr><td>3</td><td>转账</td></tr></table>
      * @apiSuccess {String} data.transactionTime 交易完成时间（格式：yyyy-MM-dd HH:mm:ss）
      * @apiSuccess {String} data.transactionTimestamp 交易时间戳
-     * @apiSuccess {String} data.transactionHash 交易哈希
-     * @apiSuccess {String} data.transferOut 出账方
-     * @apiSuccess {String} data.transferInto 入账方
+     * @apiSuccess {String} data.txHash 交易哈希
+     * @apiSuccess {String} data.sender 出账方，转账为扣款账户，提现为提现钱包
+     * @apiSuccess {String} data.recipients 入账方，充值为充值地址
      * @apiSuccess {String} data.assetCode 交易资产缩写
      * @apiSuccess {BigDecimal} data.assetAmt 金额
-     * @apiSuccess {BigDecimal} data.handlingFee 手续费
-     * @apiSuccess {String} data.transactionNetwork 交易网络
+     * @apiSuccess {BigDecimal} data.handlingFee 手续费，转账和提现为系统手续费，充值为空
+     * @apiSuccess {String} data.transactionNetwork 交易网络，现阶段转账时为空、提现时为主网资产
      * @apiSuccess {String} data.blockHash 区块哈希
-     * @apiSuccess {BigDecimal} data.blockHeight 区块高度
-     * @apiSuccess {BigDecimal} data.blockTime 区块时间戳
+     * @apiSuccess {String} data.blockHeight 区块高度
+     * @apiSuccess {String} data.blockTime 区块时间戳
      *
      */
     public ServiceCall<BaseResponse.TransactionResponse> transaction(TransactionRequest transactionRequest) {
         String[] pathSegments = {BASE_URL, "getTransaction"};
         RequestBuilder builder = RequestBuilder.get(RequestBuilder.constructHttpUrl(getEndPoint(), pathSegments))
-                .query("assetCode", transactionRequest.getAssetCode(), "outsideSerialNumber", transactionRequest.getOutsideSerialNumber()
-                        , "serialNumber", transactionRequest.getSerialNumber(), "tranType", transactionRequest.getTranType());
+                .query("account", transactionRequest.getAccount(), "serialNumber", transactionRequest.getSerialNumber());
         return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.TransactionResponse.class));
     }
 
@@ -121,43 +130,60 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiGroup Wallet
      * @apiVersion 1.0.0
      *
-     * @apiParam {String} payAccount   用户账户
-     * @apiParam {String} [startDate]   起始日期
-     * @apiParam {String} [endDate]   截止日期
+     * @apiParam {String} account   用户账户，用户名或注册邮箱（清算链地址），主账户有权查询子账户资产
+     * @apiParam {String} [startDate]   起始日期（格式：yyyy-MM-dd HH:mm:ss)，查询起始时间，精确到秒。默认为查询当天。
+     * @apiParam {String} [endDate]   截止日期（格式：yyyy-MM-dd HH:mm:ss)，查询截止时间，精确到秒。默认为查询当天。
      * @apiParam {Integer=1,2,3} [tranType] 交易类型，默认为所有
-     * <table><tr><th>交易类型</th><th>描述</th></tr><tr><td>1</td><td>充值</td></tr><tr><td>2</td><td>提现</td></tr><tr><td>3</td><td>转账</td></tr></table>
-     * @apiParam {Integer{1-1000}} [limit=10]    返回条数
+     * <table><tr><th>交易类型</th><th>描述</th></tr>
+     * <tr><td>1</td><td>充值</td></tr>
+     * <tr><td>2</td><td>提现</td></tr>
+     * <tr><td>3</td><td>转账</td></tr></table>
+     * @apiParam {Integer{1-1000}} [limit=10]    返回条数，当时间区间里的交易记录大于1000条时，以交易时间倒序取最近的1000条。
      * @apiParam {String} [assetCode]    资产种类，默认为所有资产。多个资产以逗号分隔
+     * @apiParam {Integer=1,2,3} [accountType=1] 账户类型
+     * <table><tr><th>账户类型</th><th>描述</th></tr>
+     * <tr><td>1</td><td>管理员账户</td></tr>
+     * <tr><td>2</td><td>管理员手续费账户</td>
+     * </tr><tr><td>3</td><td>子管理员账户</td></tr></table>
      *
      * @apiSuccess {String} status 请求返回状态
      * @apiSuccess {String} message 请求返回提示信息
-     * @apiSuccess {Object} data 请求返回信息
-     * @apiSuccess {String} data.serialNumber 流水号
+     * @apiSuccess {List} data 请求返回信息
+     * @apiSuccess {String} data.serialNumber 交易流水号
      * @apiSuccess {String} data.outsideSerialNumber 外部流水号
-     * @apiSuccess {Integer} data.transactionResult 交易结果
-     * <table><tr><th>交易结果</th><th>描述</th></tr><tr><td>1</td><td>交易完成</td></tr><tr><td>2</td><td>待处理</td></tr><tr><td>3</td><td>交易失败</td></tr><tr><td>4</td><td>交易不存在</td></tr></table>
+     * @apiSuccess {String} data.status 交易状态
+     * <table><tr><th>交易状态</th><th>描述</th></tr>
+     * <tr><td>01</td><td>交易完成</td></tr>
+     * <tr><td>02</td><td>交易待处理</td></tr>
+     * <tr><td>03</td><td>交易失败</td></tr>
+     * <tr><td>04</td><td>提现待确认</td></tr>
+     * <tr><td>05</td><td>提现撤销</td></tr></table>
      * @apiSuccess {Integer} data.transactionType 交易类型
-     * <table><tr><th>交易类型</th><th>描述</th></tr><tr><td>1</td><td>充值</td></tr><tr><td>2</td><td>提现</td></tr><tr><td>3</td><td>转账</td></tr></table>
+     * <table><tr><th>交易类型</th><th>描述</th></tr>
+     * <tr><td>1</td><td>充值</td></tr>
+     * <tr><td>2</td><td>提现</td></tr>
+     * <tr><td>3</td><td>转账</td></tr></table>
      * @apiSuccess {String} data.transactionTime 交易完成时间（格式：yyyy-MM-dd HH:mm:ss）
      * @apiSuccess {String} data.transactionTimestamp 交易时间戳
-     * @apiSuccess {String} data.transactionHash 交易哈希
-     * @apiSuccess {String} data.transferOut 出账方
-     * @apiSuccess {String} data.transferInto 入账方
+     * @apiSuccess {String} data.txHash 交易哈希
+     * @apiSuccess {String} data.sender 出账方，转账为扣款账户，提现为提现钱包
+     * @apiSuccess {String} data.recipients 入账方，充值为充值地址
      * @apiSuccess {String} data.assetCode 交易资产缩写
      * @apiSuccess {BigDecimal} data.assetAmt 金额
-     * @apiSuccess {BigDecimal} data.handlingFee 手续费
+     * @apiSuccess {BigDecimal} data.handlingFee 手续费，转账和提现为系统手续费，充值为空
      * @apiSuccess {String} data.transactionNetwork 交易网络
      * @apiSuccess {String} data.blockHash 区块哈希
-     * @apiSuccess {BigDecimal} data.blockHeight 区块高度
-     * @apiSuccess {BigDecimal} data.blockTime 区块时间戳
+     * @apiSuccess {String} data.blockHeight 区块高度
+     * @apiSuccess {String} data.blockTime 区块时间戳
      *
      */
     public ServiceCall<BaseResponse.TransactionsResponse> transactions(TransactionRequest transactionRequest) {
         String[] pathSegments = {BASE_URL, "getTransactionList"};
         RequestBuilder builder = RequestBuilder.get(RequestBuilder.constructHttpUrl(getEndPoint(), pathSegments))
-                .query("assetCode", transactionRequest.getAssetCode(), "payAccount", transactionRequest.getPayAccount()
+                .query("assetCode", transactionRequest.getAssetCode(), "account", transactionRequest.getAccount()
                         , "endDate", transactionRequest.getEndDate(), "limit", transactionRequest.getLimit()
-                        , "startDate", transactionRequest.getStartDate(), "tranType", transactionRequest.getTranType());
+                        , "startDate", transactionRequest.getStartDate(), "tranType", transactionRequest.getTranType()
+                        , "accountType", transactionRequest.getAccountType());
         return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.TransactionsResponse.class));
     }
 
@@ -166,117 +192,137 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiGroup Wallet
      * @apiVersion 1.0.0
      *
-     * @apiParam {String} payAccount 付款账户
-     * @apiParam {String=1} payPattern 付款模式
-     * <table><tr><th>付款模式</th><th>描述</th></tr><tr><td>1</td><td>单笔</td></tr></table>
+     * @apiParam {String} account 付款账户
+     * @apiParam {String=01,02} payPattern 付款模式
+     * <table><tr><th>付款模式</th><th>描述</th></tr>
+     * <tr><td>01</td><td>单笔</td></tr>
+     * <tr><td>02</td><td>批量</td></tr></table>
      * @apiParam {String} assetCode 付款资产，币种缩写
-     * @apiParam {String} receAccount 收款人账户
-     * @apiParam {String} payAmount 付款金额
-     * @apiParam {String} payTime 付款时间
-     * @apiParam {String} outNumber 外部流水号
-     * @apiParam {String} [isShare] 是否分润（暂时不提供该功能）
-     * @apiParam {String} [shareAccounts] 分润账户集（暂时不提供该功能）
-     * @apiParam {String} [remark] 备注
+     * @apiParam {List} transferData 转账信息列表
+     * @apiParam {String} transferData.receAccount 收款人账户，收款人账户可以是账户名或注册邮箱。
+     * @apiParam {BigDecimal} transferData.payAmount 付款金额
+     * @apiParam {String} [transferData.outNumber] 外部流水号
+     * @apiParam {String} [transferData.remark] 备注
      *
      * @apiSuccess {String} status 请求返回状态
      * @apiSuccess {String} message 请求返回提示信息
      * @apiSuccess {Object} data 请求返回信息
-     * @apiSuccess {String} data.bizNumber 转账流水号
-     * @apiSuccess {String} data.outNumber 外部流水号
-     * @apiSuccess {String} data.status 转账结果
-     * <table><tr><th>转账结果</th><th>描述</th></tr><tr><td>1</td><td>申请</td></tr><tr><td>2</td><td>提现完成</td></tr><tr><td>3</td><td>提现失败</td></tr><tr><td>4</td><td>已撤销</td></tr></table>
-     * @apiSuccess {String} data.accountAmount 账户余额
-     * @apiSuccess {String} data.sucTime 交易完成时间（格式：yyyy-MM-dd HH:mm:ss）
+     * @apiSuccess {String} data.account 付款账户
+     * @apiSuccess {BigDecimal} data.totalAmount 付款金额
+     * @apiSuccess {BigDecimal} data.usableAmt 账户可用余额
+     * @apiSuccess {List} data.backData 返回数据列表
+     * @apiSuccess {String} data.backData.bizNumber 转账流水号
+     * @apiSuccess {String} data.backData.outNumber 外部流水号
+     * @apiSuccess {String} data.backData.status 交易状态
+     * <table><tr><th>交易状态</th><th>描述</th></tr>
+     * <tr><td>01</td><td>交易完成</td></tr>
+     * <tr><td>02</td><td>交易待处理</td></tr>
+     * <tr><td>03</td><td>交易失败</td></tr></table>
+     * @apiSuccess {String} data.backData.describe 交易说明
+     * @apiSuccess {String} data.backData.sucTime 交易完成时间（格式：yyyy-MM-dd HH:mm:ss）
      */
     public ServiceCall<BaseResponse.TransferResponse> transfer(TransferRequest transferRequest) {
         String[] pathSegments = {BASE_URL, "transfer"};
         RequestBuilder builder = RequestBuilder.post(RequestBuilder.constructHttpUrl(getEndPoint(), pathSegments))
-                .form("assetCode", transferRequest.getAssetCode(), "payAccount", transferRequest.getPayAccount()
-                        , "payPattern", transferRequest.getPayPattern(), "receAccount", transferRequest.getReceAccount()
-                        , "payAmount", transferRequest.getPayAmount(), "payTime", transferRequest.getPayTime()
-                        , "isShare", transferRequest.getIsShare(), "share", transferRequest.getShareAccounts()
-                        , "outNumber", transferRequest.getOutNumber()
-                        , "remark", transferRequest.getRemark());
-        return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.TransferResponse.class));
+                .bodyJson(new Gson().toJsonTree(transferRequest).getAsJsonObject());
+        return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.TransferResponse.class), builder.getJsonBody());
     }
 
     /**
-     * @api DaexWalletApiClient.withdraw(WithdrawRequest.class) 提现
+     * @api DaexWalletApiClient.withdraw(DrawRequest.class) 提现
      * @apiGroup Wallet
      * @apiVersion 1.0.0
      *
-     * @apiParam {String} withdrawAccount 提现账户
-     * @apiParam {String} withdrawPattern 提现模式
-     * <table><tr><th>提现模式</th><th>描述</th></tr><tr><td>1</td><td>单笔</td></tr></table>
+     * @apiParam {String} account 用户账户
+     * @apiParam {String=01,02} payPattern 提现模式
+     * <table><tr><th>提现模式</th><th>描述</th></tr>
+     * <tr><td>01</td><td>单笔</td></tr>
+     * <tr><td>02</td><td>批量</td></tr></table>
      * @apiParam {String} assetCode 提现资产，币种缩写
-     * @apiParam {String} withdrawTime 提现时间
-     * @apiParam {String} outNumber 外部流水号
-     * @apiParam {String} withdrawAddress 提现地址
-     * @apiParam {BigDecimal} withdrawAmount 提现金额
-     * @apiParam {String} [remark] 备注
-     * @apiParam {String} [memo] 提现标签集
+     * @apiParam {Integer=0,1} isdax 手续费是否为DAX
+     * <table><tr><th>手续费币种</th><th>描述</th></tr>
+     * <tr><td>0</td><td>提现币种</td></tr>
+     * <tr><td>1</td><td>DAX</td></tr></table>
+     * @apiParam {List} drawData 提现信息列表
+     * @apiParam {String} drawData.outNumber 外部流水号
+     * @apiParam {String} drawData.putAddress 提现地址
+     * @apiParam {BigDecimal} drawData.putAmount 提现金额
+     * @apiParam {String} [drawData.customerInfoFees] 平台代理手续费
+     * @apiParam {String} [drawData.memo] 提现标签集
+     * @apiParam {String} [drawData.remark] 备注
      *
      *
      * @apiSuccess {String} status 请求返回状态
      * @apiSuccess {String} message 请求返回提示信息
      * @apiSuccess {Object} data 请求返回信息
-     * @apiSuccess {String} data.bizNumber 提现流水号
-     * @apiSuccess {String} data.outNumber 外部流水号
-     * @apiSuccess {String} data.status 提现申请结果
-     * <table><tr><th>提现申请结果</th><th>描述</th></tr><tr><td>1</td><td>申请</td></tr><tr><td>2</td><td>提现完成</td></tr><tr><td>3</td><td>提现失败</td></tr><tr><td>4</td><td>已撤销</td></tr></table>
-     * @apiSuccess {String} data.sucTime 申请完成时间（格式：yyyy-MM-dd HH:mm:ss）
-     * @apiSuccess {String} data.freezeAmt 账户冻结资产
-     * @apiSuccess {String} data.backURL 提现确认验证码（为param后面的数据）
+     * @apiSuccess {String} data.account 提现账户
+     * @apiSuccess {BigDecimal} data.totalAmount 提现总金额
+     * @apiSuccess {BigDecimal} data.usableAmt 账户可用余额
+     * @apiSuccess {List} data.backData 返回数据列表
+     * @apiSuccess {String} data.backData.bizNumber 提现流水号
+     * @apiSuccess {String} data.backData.outNumber 外部流水号
+     * @apiSuccess {String} data.backData.status 交易状态
+     * <table><tr><th>交易状态</th><th>描述</th></tr>
+     * <tr><td>01</td><td>交易完成</td></tr>
+     * <tr><td>02</td><td>交易待处理</td></tr>
+     * <tr><td>03</td><td>交易失败</td></tr>
+     * <tr><td>04</td><td>提现待确认</td></tr>
+     * <tr><td>05</td><td>提现撤销</td></tr></table>
+     * @apiSuccess {String} data.backData.describe 交易说明
+     * @apiSuccess {String} data.backData.confirmCode 提现确认验证码（发起提现确认的验证信息）
+     * @apiSuccess {String} data.backData.applyTime 交易完成时间（格式：yyyy-MM-dd HH:mm:ss）
+     *
      */
-    public ServiceCall<BaseResponse.WithdrawResponse> withdraw(WithdrawRequest withdrawRequest) {
+    public ServiceCall<BaseResponse.DrawResponse> withdraw(DrawRequest drawRequest) {
         String[] pathSegments = {BASE_URL, "putApply"};
         RequestBuilder builder = RequestBuilder.post(RequestBuilder.constructHttpUrl(getEndPoint(), pathSegments))
-                .form("assetCode", withdrawRequest.getAssetCode(), "payAccount", withdrawRequest.getWithdrawAccount()
-                        , "payPattern", withdrawRequest.getWithdrawPattern(), "putAddress", withdrawRequest.getWithdrawAddress()
-                        , "putAmount", withdrawRequest.getWithdrawAmount(), "payTime", withdrawRequest.getWithdrawTime()
-                        , "outNumber", withdrawRequest.getOutNumber(), "remark", withdrawRequest.getRemark());
-        return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.WithdrawResponse.class));
+                .bodyJson(new Gson().toJsonTree(drawRequest).getAsJsonObject());
+        return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.DrawResponse.class), builder.getJsonBody());
     }
 
 
     /**
-     * @api DaexWalletApiClient.withdrawConfirm(WithdrawRequest.class) 提现确认
+     * @api DaexWalletApiClient.withdrawConfirm(DrawConfirm.class) 提现确认
      * @apiGroup Wallet
      * @apiVersion 1.0.0
      *
-     * @apiParam {String} withdrawAccount 提现账户
-     * @apiParam {String} withdrawPattern 提现模式
-     * <table><tr><th>提现模式</th><th>描述</th></tr><tr><td>1</td><td>单笔</td></tr></table>
+     * @apiParam {String} account 提现账户
+     * @apiParam {String=01,02} payPattern 提现模式
+     * <table><tr><th>提现模式</th><th>描述</th></tr><tr><td>01</td><td>单笔</td></tr><tr><td>02</td><td>批量</td></tr></table>
      * @apiParam {String} assetCode 提现资产，币种缩写
-     * @apiParam {String} withdrawTime 提现时间
-     * @apiParam {String} outNumber 外部流水号
-     * @apiParam {String} withdrawAddress 提现地址
-     * @apiParam {String} bizNumber 提现流水号
-     * @apiParam {BigDecimal} withdrawAmount 提现金额
-     * @apiParam {String} operation 提现操作
-     * <table><tr><th>提现操作</th><th>描述</th></tr><tr><td>01</td><td>确认</td></tr><tr><td>02</td><td>撤销</td></tr></table>
-     * @apiParam {String} [remark] 备注
-     * @apiParam {String} [memo] 提现标签集
+     * @apiParam {String} noticeURL 通知地址，与通知回调白名单中登记的url比对
+     * @apiParam {List} drawConfirmData
+     * @apiParam {String=01,02} drawConfirmData.operation 提现操作
+     * <table><tr><th>提现操作</th><th>描述</th></tr>
+     * <tr><td>01</td><td>确认</td></tr>
+     * <tr><td>02</td><td>撤销</td></tr></table>
+     * @apiParam {String} drawConfirmData.confirmCode 提现确认验证码
+     * @apiParam {String} [drawConfirmData.remark] 备注
      *
      * @apiSuccess {String} status 请求返回状态
      * @apiSuccess {String} message 请求返回提示信息
      * @apiSuccess {Object} data 请求返回信息
-     * @apiSuccess {String} data.bizNumber 提现流水号
-     * @apiSuccess {String} data.outNumber 外部流水号
-     * @apiSuccess {String} data.status 提现复核结果
-     * <table><tr><th>提现复核结果</th><th>描述</th></tr><tr><td>1</td><td>申请</td></tr><tr><td>2</td><td>提现完成</td></tr><tr><td>3</td><td>提现失败</td></tr><tr><td>4</td><td>已撤销</td></tr></table>
-     * @apiSuccess {String} data.sucTime 交易完成时间（格式：yyyy-MM-dd HH:mm:ss）
-     * @apiSuccess {String} data.usableAmt 账户余额
+     * @apiSuccess {String} data.account 提现账户
+     * @apiSuccess {BigDecimal} data.totalAmount 提现总金额
+     * @apiSuccess {BigDecimal} data.usableAmt 账户可用余额
+     * @apiSuccess {List} data.backData 返回数据列表
+     * @apiSuccess {String} data.backData.bizNumber 提现流水号
+     * @apiSuccess {String} data.backData.status 交易状态
+     * <table><tr><th>交易状态</th><th>描述</th></tr>
+     * <tr><td>01</td><td>交易完成</td></tr>
+     * <tr><td>02</td><td>交易待处理</td></tr>
+     * <tr><td>03</td><td>交易失败</td></tr>
+     * <tr><td>04</td><td>提现待确认</td></tr>
+     * <tr><td>05</td><td>提现撤销</td></tr></table>
+     * @apiSuccess {String} data.backData.sucTime 交易完成时间（格式：yyyy-MM-dd HH:mm:ss）
+     * @apiSuccess {String} data.backData.describe 交易说明
+     *
      */
-    public ServiceCall<BaseResponse.WithdrawResponse> withdrawConfirm(WithdrawRequest withdrawRequest) {
+    public ServiceCall<BaseResponse.DrawConfirmResponse> withdrawConfirm(DrawConfirmRequest drawConfirmRequest) {
         String[] pathSegments = {BASE_URL, "putApplyConfirm"};
         RequestBuilder builder = RequestBuilder.post(RequestBuilder.constructHttpUrl(getEndPoint(), pathSegments))
-                .form("assetCode", withdrawRequest.getAssetCode(), "payAccount", withdrawRequest.getWithdrawAccount()
-                        , "payPattern", withdrawRequest.getWithdrawPattern(), "putAddress", withdrawRequest.getWithdrawAddress()
-                        , "putAmount", withdrawRequest.getWithdrawAmount(), "payTime", withdrawRequest.getWithdrawTime()
-                        , "outNumber", withdrawRequest.getOutNumber(), "remark", withdrawRequest.getRemark()
-                        , "operation", withdrawRequest.getOperation(), "bizNumber", withdrawRequest.getBizNumber());
-        return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.WithdrawResponse.class));
+                .bodyJson(new Gson().toJsonTree(drawConfirmRequest).getAsJsonObject());
+        return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.DrawConfirmResponse.class), builder.getJsonBody());
     }
 
     /**
@@ -287,18 +333,24 @@ public class DaexWalletApiClient extends DaexClient {
      * <table><tr><th>status</th><th>描述</th></tr>
      * <tr><td>00000</td><td>成功</td></tr>
      * <tr><td>10001</td><td>参数不能为空</td></tr>
-     * <tr><td>10002</td><td>非法参数</td></tr>
+     * <tr><td>10002</td><td>参数数量错误</td></tr>
      * <tr><td>10003</td><td>重复请求</td></tr>
      * <tr><td>10004</td><td>错误的报文格式</td></tr>
      * <tr><td>20001</td><td>系统内部错误</td></tr>
-     * <tr><td>20002</td><td>网络</td></tr>
-     * <tr><td>30001</td><td>金额非法</td></tr>
+     * <tr><td>20002</td><td>网络异常</td></tr>
+     * <tr><td>30001</td><td>账户余额不足</td></tr>
      * <tr><td>30002</td><td>发起方账户非法</td></tr>
-     * <tr><td>30003</td><td>接收方账户非法</td></tr>
+     * <tr><td>30003</td><td>账户不存在</td></tr>
      * <tr><td>30004</td><td>日期非法</td></tr>
+     * <tr><td>30005</td><td>非法的账户类型</td></tr>
+     * <tr><td>30006</td><td>地址格式错误</td></tr>
+     * <tr><td>30007</td><td>操作金额非法</td></tr>
+     * <tr><td>30008</td><td>包含已处理的流水</td></tr>
+     * <tr><td>30009</td><td>包含错误的提现确认验证码</td></tr>
      * <tr><td>40001</td><td>API类型不匹配</td></tr>
      * <tr><td>40002</td><td>非法API</td></tr>
-     * <tr><td>40003</td><td>API提现已关闭</td></tr>
+     * <tr><td>40003</td><td>API转账已关闭</td></tr>
+     * <tr><td>40004</td><td>API提现已关闭</td></tr>
      * <tr><td>99999</td><td>无数据</td></tr></table>
      *
      */

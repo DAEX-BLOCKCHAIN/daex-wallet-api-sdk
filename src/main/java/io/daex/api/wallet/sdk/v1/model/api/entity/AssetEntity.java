@@ -1,15 +1,11 @@
-package io.daex.api.wallet.sdk.v1.model;
+package io.daex.api.wallet.sdk.v1.model.api.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-/**
- * Created by qingyun.yu on 2018/7/13.
- */
-public class Balance {
-    /**
-     * 账号
-     */
-    private String account;
+public class AssetEntity implements Serializable {
+
+    private static final long serialVersionUID = 791175005870093284L;
     /**
      * 数字货币资产
      */
@@ -57,13 +53,5 @@ public class Balance {
 
     public void setUsableAmt(BigDecimal usableAmt) {
         this.usableAmt = usableAmt;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
     }
 }

@@ -1,5 +1,7 @@
-package io.daex.api.wallet.sdk.v1.model;
+package io.daex.api.wallet.sdk.v1.model.api.response;
 
+
+import io.daex.api.wallet.sdk.v1.model.api.entity.ResultData;
 import io.daex.sdk.core.service.model.ObjectModel;
 
 import java.util.List;
@@ -40,11 +42,13 @@ public class BaseResponse<T> implements ObjectModel {
 
     public class WalletAddressResponse extends BaseResponse<WalletAddress> {}
 
-    public class BalancesResponse extends BaseResponse<List<Balance>> {}
+    public class BalancesResponse extends BaseResponse<Balance> {}
 
     public class TransactionsResponse extends BaseResponse<List<Transaction>> {}
 
-    public class TransferResponse extends BaseResponse<Transfer> {}
+    public class TransferResponse extends BaseResponse<ResultData<Transfer>> {}
 
-    public class WithdrawResponse extends BaseResponse<Withdraw> {}
+    public class DrawResponse extends BaseResponse<ResultData<Draw>> {}
+
+    public class DrawConfirmResponse extends BaseResponse<ResultData<DrawConfirm>> {}
 }
