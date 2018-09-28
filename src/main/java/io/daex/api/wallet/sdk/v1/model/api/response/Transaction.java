@@ -74,6 +74,8 @@ public class Transaction implements Serializable {
      */
     private String blockTime;
 
+    private String memo;
+
     public String getSerialNumber() {
         return serialNumber;
     }
@@ -203,4 +205,11 @@ public class Transaction implements Serializable {
         this.blockTime = blockTime;
     }
 
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
 }

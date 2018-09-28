@@ -17,8 +17,6 @@ public class DrawConfirmEntity implements Serializable {
      * 提现操作类型  01.确认 02.撤销
      */
     private String operations;
-    public static String confirm = "01";
-    public static String cancel = "02";
     /**
      * 备注
      */

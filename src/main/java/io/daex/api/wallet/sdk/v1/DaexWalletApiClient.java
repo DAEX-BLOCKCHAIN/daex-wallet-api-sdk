@@ -1,11 +1,9 @@
 package io.daex.api.wallet.sdk.v1;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import io.daex.api.wallet.sdk.v1.model.api.request.*;
 import io.daex.api.wallet.sdk.v1.model.api.response.BaseResponse;
-import io.daex.api.wallet.sdk.v1.util.SecrityUtil;
+
 import io.daex.sdk.core.client.DaexClient;
 import io.daex.sdk.core.http.RequestBuilder;
 import io.daex.sdk.core.http.ServiceCall;
@@ -109,6 +107,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {String} data.txHash 交易哈希
      * @apiSuccess {String} data.sender 出账方，转账为扣款账户，提现为提现钱包
      * @apiSuccess {String} data.recipients 入账方，充值为充值地址
+     * @apiSuccess {String} data.memo memo
      * @apiSuccess {String} data.assetCode 交易资产缩写
      * @apiSuccess {BigDecimal} data.assetAmt 金额
      * @apiSuccess {BigDecimal} data.handlingFee 手续费，转账和提现为系统手续费，充值为空
@@ -168,6 +167,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {String} data.txHash 交易哈希
      * @apiSuccess {String} data.sender 出账方，转账为扣款账户，提现为提现钱包
      * @apiSuccess {String} data.recipients 入账方，充值为充值地址
+     * @apiSuccess {String} data.memo memo
      * @apiSuccess {String} data.assetCode 交易资产缩写
      * @apiSuccess {BigDecimal} data.assetAmt 金额
      * @apiSuccess {BigDecimal} data.handlingFee 手续费，转账和提现为系统手续费，充值为空
@@ -198,7 +198,7 @@ public class DaexWalletApiClient extends DaexClient {
      * <tr><td>01</td><td>单笔</td></tr>
      * <tr><td>02</td><td>批量</td></tr></table>
      * @apiParam {String} assetCode 付款资产，币种缩写
-     * @apiParam {List} transferData 转账信息列表
+     * @apiParam {List{1..50}} transferData 转账信息列表
      * @apiParam {String} transferData.receAccount 收款人账户，收款人账户可以是账户名或注册邮箱。
      * @apiParam {BigDecimal} transferData.payAmount 付款金额
      * @apiParam {String} [transferData.outNumber] 外部流水号
@@ -243,7 +243,7 @@ public class DaexWalletApiClient extends DaexClient {
      * <table><tr><th>手续费币种</th><th>描述</th></tr>
      * <tr><td>0</td><td>提现币种</td></tr>
      * <tr><td>1</td><td>DAX</td></tr></table>
-     * @apiParam {List} drawData 提现信息列表
+     * @apiParam {List{1..50}} drawData 提现信息列表
      * @apiParam {String} drawData.outNumber 外部流水号
      * @apiParam {String} drawData.putAddress 提现地址
      * @apiParam {BigDecimal} drawData.putAmount 提现金额
@@ -291,8 +291,8 @@ public class DaexWalletApiClient extends DaexClient {
      * <table><tr><th>提现模式</th><th>描述</th></tr><tr><td>01</td><td>单笔</td></tr><tr><td>02</td><td>批量</td></tr></table>
      * @apiParam {String} assetCode 提现资产，币种缩写
      * @apiParam {String} noticeURL 通知地址，与通知回调白名单中登记的url比对
-     * @apiParam {List} drawConfirmData
-     * @apiParam {String=01,02} drawConfirmData.operation 提现操作
+     * @apiParam {List{1..50}} drawConfirmData
+     * @apiParam {String=01,02} drawConfirmData.operations 提现操作
      * <table><tr><th>提现操作</th><th>描述</th></tr>
      * <tr><td>01</td><td>确认</td></tr>
      * <tr><td>02</td><td>撤销</td></tr></table>

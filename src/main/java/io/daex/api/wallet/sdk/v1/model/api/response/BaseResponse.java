@@ -38,17 +38,17 @@ public class BaseResponse<T> implements ObjectModel {
         this.data = data;
     }
 
-    public class TransactionResponse extends BaseResponse<Transaction> {}
+    public static class TransactionResponse extends BaseResponse<Transaction> {}
 
-    public class WalletAddressResponse extends BaseResponse<WalletAddress> {}
+    public static class WalletAddressResponse extends BaseResponse<WalletAddress> {}
 
-    public class BalancesResponse extends BaseResponse<Balance> {}
+    public static class BalancesResponse extends BaseResponse<Balance> {}
 
-    public class TransactionsResponse extends BaseResponse<List<Transaction>> {}
+    public static class TransactionsResponse extends BaseResponse<List<Transaction>> {}
 
-    public class TransferResponse extends BaseResponse<ResultData<Transfer>> {}
+    public static class TransferResponse extends BaseResponse<ResultData<Transfer>> {}
 
-    public class DrawResponse extends BaseResponse<ResultData<Draw>> {}
+    public static class DrawResponse extends BaseResponse<ResultData<Draw>> {}
 
-    public class DrawConfirmResponse extends BaseResponse<ResultData<DrawConfirm>> {}
+    public static class DrawConfirmResponse extends BaseResponse<ResultData<DrawConfirm>> {}
 }

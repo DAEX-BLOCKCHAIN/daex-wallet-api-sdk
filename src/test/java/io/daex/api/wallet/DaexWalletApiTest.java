@@ -21,7 +21,7 @@ import java.util.Arrays;
  * Created by qingyun.yu on 2018/7/13.
  */
 public class DaexWalletApiTest {
-    private final static String endPoint = "http://172.16.1.189:5000/api";
+    private final static String endPoint = "http://localhost:5000/api";
     private final DaexWalletApiClient client = new DaexWalletApiClient(endPoint);
 
     @Test
@@ -29,7 +29,7 @@ public class DaexWalletApiTest {
         WalletAddressRequest walletAddressRequest = new WalletAddressRequest();
         walletAddressRequest.setAddressCount(1);
         walletAddressRequest.setAssetCode("DAX");
-        walletAddressRequest.setAccount("yuqingyun@daex.io");
+        walletAddressRequest.setAccount("xxx@xx.xx");
         BaseResponse.WalletAddressResponse walletAddressResponse = client.walletAddress(walletAddressRequest).execute();
         System.out.println(StatusType.statusType(walletAddressResponse.getStatus()).message());
         System.out.println(new Gson().toJson(walletAddressResponse));
@@ -39,7 +39,7 @@ public class DaexWalletApiTest {
     public void testBalanceStatistical() {
         BalanceRequest balanceRequest = new BalanceRequest();
         balanceRequest.setAssetCode("DAX", "BTC", "DAX");
-        balanceRequest.setAccount("yuqingyun@daex.io");
+        balanceRequest.setAccount("xxx@xx.xx");
         BaseResponse.BalancesResponse balancesResponse = client.balanceStatistical(balanceRequest).execute();
         System.out.println(new Gson().toJson(balancesResponse));
     }
@@ -47,8 +47,8 @@ public class DaexWalletApiTest {
     @Test
     public void testTransaction() {
         TransactionRequest transactionRequest = new TransactionRequest();
-        transactionRequest.setAccount("yuqingyun@daex.io");
-        transactionRequest.setSerialNumber("TX15371711203251475");
+        transactionRequest.setAccount("xxx@xx.xx");
+        transactionRequest.setSerialNumber("TX1537171***");
         BaseResponse.TransactionResponse transactionResponse = client.transaction(transactionRequest).execute();
         System.out.println(new Gson().toJson(transactionResponse));
     }
@@ -56,7 +56,7 @@ public class DaexWalletApiTest {
     @Test
     public void testTransactions() {
         TransactionRequest transactionRequest = new TransactionRequest();
-        transactionRequest.setAccount("yuqingyun@daex.io");
+        transactionRequest.setAccount("xxx@xx.xx");
         BaseResponse.TransactionsResponse transactionsResponse = client.transactions(transactionRequest).execute();
         System.out.println(new Gson().toJson(transactionsResponse));
     }
@@ -64,19 +64,22 @@ public class DaexWalletApiTest {
     @Test
     public void testWithdraw() {
         DrawRequest drawRequest = new DrawRequest();
-        drawRequest.setAccount("yuqingyun@daex.io");
+        drawRequest.setAccount("xxx@xx.xx");
         drawRequest.setPayPattern(PatternType.SINGLE.pattern());
-        drawRequest.setAssetCode("BTC");
+        drawRequest.setAssetCode("dax");
         drawRequest.setIsdax(FeeType.DAX.type());
         DrawEntity drawEntity = new DrawEntity();
-        drawEntity.setOutNumber("1111111");
-        drawEntity.setPutAddress("1111111");
-        drawEntity.setPutAmount(new BigDecimal(3));
+        drawEntity.setOutNumber("91011");
+        drawEntity.setPutAddress("erfwergertghrehyrheyryqqw");
+        drawEntity.setPutAmount(BigDecimal.ONE);
+        drawEntity.setMemo(null);
+        drawEntity.setCustomerInfoFees(BigDecimal.valueOf(0.0010000000));
         DrawEntity drawEntity2 = new DrawEntity();
         drawEntity2.setOutNumber("1111112");
         drawEntity2.setPutAddress("1111112");
         drawEntity2.setPutAmount(new BigDecimal(4));
-        drawRequest.setDrawData(Arrays.asList(drawEntity, drawEntity2));
+
+        drawRequest.setDrawData(Arrays.asList(drawEntity));
         BaseResponse.DrawResponse drawResponse = client.withdraw(drawRequest).execute();
         System.out.println(new Gson().toJson(drawResponse));
     }
@@ -84,11 +87,11 @@ public class DaexWalletApiTest {
     @Test
     public void testTransfer() {
         TransferRequest transferRequest = new TransferRequest();
-        transferRequest.setAccount("yuqingyun@daex.io");
+        transferRequest.setAccount("xxx@xx.xx");
         transferRequest.setPayPattern(PatternType.MULTI.pattern());
         transferRequest.setAssetCode("DAX");
         TransferEntity transferEntity = new TransferEntity();
-        transferEntity.setReceAccount("bibibiBI2");
+        transferEntity.setReceAccount("bibibi**");
         transferEntity.setPayAmount(new BigDecimal(100));
         transferEntity.setOutNumber("wb1234562");
         transferEntity.setRemark("00f9011f-c3c9-47ff-9b37-d1290d0bf8a7:ZpIwHiBIiUqfSHx8VIoItd08zzPN/z38gZoIZMB4ULHQ1XBiD5VFL7leu2R");
@@ -106,10 +109,10 @@ public class DaexWalletApiTest {
     @Test
     public void testWithdrawConfirm() {
         DrawConfirmRequest drawConfirmRequest = new DrawConfirmRequest();
-        drawConfirmRequest.setAccount("yuqingyun@daex.io");
+        drawConfirmRequest.setAccount("xxx@xx.xx");
         drawConfirmRequest.setPayPattern(PatternType.MULTI.pattern());
         drawConfirmRequest.setAssetCode("BTC");
-        drawConfirmRequest.setNoticeURL("http://www.baidu.com");
+        drawConfirmRequest.setNoticeURL("http://www.***.com");
         DrawConfirmEntity drawConfirmEntity = new DrawConfirmEntity();
         drawConfirmEntity.setOperations(OperationType.CONFIRM.type());
         drawConfirmEntity.setConfirmCode("e30df6412d620d2fc69bd4e512468c8c1681d6dd88391c47913a4f378d17ae11cda4ddf6fc394586c443cd64cbf65ca2e6c3f8351fa9fca7");

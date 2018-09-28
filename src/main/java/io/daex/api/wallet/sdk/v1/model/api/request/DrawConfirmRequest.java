@@ -21,8 +21,6 @@ public class DrawConfirmRequest implements Serializable {
      * 付款模式 01.单笔 02.批量
      */
     private String payPattern;
-    public static String single = "01";
-    public static String batch = "02";
 
     /**
      * 提现资产 (币种)
