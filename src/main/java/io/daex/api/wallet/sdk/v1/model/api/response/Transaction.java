@@ -76,6 +76,8 @@ public class Transaction implements Serializable {
 
     private String memo;
 
+    private String txRemark;
+
     public String getSerialNumber() {
         return serialNumber;
     }
@@ -211,5 +213,13 @@ public class Transaction implements Serializable {
 
     public void setMemo(String memo) {
         this.memo = memo;
+    }
+
+    public String getTxRemark() {
+        return txRemark;
+    }
+
+    public void setTxRemark(String txRemark) {
+        this.txRemark = txRemark;
     }
 }
