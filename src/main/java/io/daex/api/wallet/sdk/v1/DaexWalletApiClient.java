@@ -102,19 +102,39 @@ public class DaexWalletApiClient extends DaexClient {
      * <tr><td>1</td><td>充值</td></tr>
      * <tr><td>2</td><td>提现</td></tr>
      * <tr><td>3</td><td>转账</td></tr></table>
+     * @apiSuccess {Integer} data.capitalFlows 资金流向
+     * <table><tr><th>资金流向</th><th>描述</th></tr>
+     * <tr><td>1</td><td>收入</td></tr>
+     * <tr><td>2</td><td>支出</td></tr></table>
+     * @apiSuccess {String} data.createTime 交易申请时间
      * @apiSuccess {String} data.transactionTime 交易完成时间（格式：yyyy-MM-dd HH:mm:ss）
-     * @apiSuccess {String} data.transactionTimestamp 交易时间戳
      * @apiSuccess {String} data.txHash 交易哈希
+     * @apiSuccess {String} data.senderAccount 出账方账户
+     * @apiSuccess {String} data.recipientsAccount 入账方账户
      * @apiSuccess {String} data.sender 出账方，转账为扣款账户，提现为提现钱包
      * @apiSuccess {String} data.recipients 入账方，充值为充值地址
      * @apiSuccess {String} data.memo memo
      * @apiSuccess {String} data.assetCode 交易资产缩写
      * @apiSuccess {BigDecimal} data.assetAmt 金额
      * @apiSuccess {BigDecimal} data.handlingFee 手续费，转账和提现为系统手续费，充值为空
+     * @apiSuccess {String} data.assetCodeFee 交易手续费币种
+     * @apiSuccess {BigDecimal} data.collectionFee 平台代理手续费
+     * @apiSuccess {String} data.channel 交易渠道
      * @apiSuccess {String} data.transactionNetwork 交易网络，现阶段转账时为空、提现时为主网资产
      * @apiSuccess {String} data.blockHash 区块哈希
      * @apiSuccess {String} data.blockHeight 区块高度
-     * @apiSuccess {String} data.blockTime 区块时间戳
+     * @apiSuccess {String} data.category 类别
+     * <table><tr><th>类别</th><th>描述</th></tr>
+     * <tr><td>01</td><td>手续费</td></tr>
+     * <tr><td>02</td><td>资金划转</td></tr>
+     * <tr><td>03</td><td>创建地址</td></tr>
+     * <tr><td>04</td><td>服务费</td></tr></table>
+     * @apiSuccess {String} data.bindSerialNumber 关联流水号
+     * @apiSuccess {String} data.apiId apiid
+     * @apiSuccess {String} data.updateTime 最后更新时间
+     * @apiSuccess {String} data.txRemark 交易备注，显示交易错误信息
+     * @apiSuccess {String} data.transactionTimestamp 交易时间戳（废弃）
+     * @apiSuccess {String} data.blockTime 区块时间戳（废弃）
      *
      */
     public ServiceCall<BaseResponse.TransactionResponse> transaction(TransactionRequest transactionRequest) {
@@ -162,19 +182,39 @@ public class DaexWalletApiClient extends DaexClient {
      * <tr><td>1</td><td>充值</td></tr>
      * <tr><td>2</td><td>提现</td></tr>
      * <tr><td>3</td><td>转账</td></tr></table>
+     * @apiSuccess {Integer} data.capitalFlows 资金流向
+     * <table><tr><th>资金流向</th><th>描述</th></tr>
+     * <tr><td>1</td><td>收入</td></tr>
+     * <tr><td>2</td><td>支出</td></tr></table>
+     * @apiSuccess {String} data.createTime 交易申请时间
      * @apiSuccess {String} data.transactionTime 交易完成时间（格式：yyyy-MM-dd HH:mm:ss）
-     * @apiSuccess {String} data.transactionTimestamp 交易时间戳
      * @apiSuccess {String} data.txHash 交易哈希
+     * @apiSuccess {String} data.senderAccount 出账方账户
+     * @apiSuccess {String} data.recipientsAccount 入账方账户
      * @apiSuccess {String} data.sender 出账方，转账为扣款账户，提现为提现钱包
      * @apiSuccess {String} data.recipients 入账方，充值为充值地址
      * @apiSuccess {String} data.memo memo
      * @apiSuccess {String} data.assetCode 交易资产缩写
      * @apiSuccess {BigDecimal} data.assetAmt 金额
      * @apiSuccess {BigDecimal} data.handlingFee 手续费，转账和提现为系统手续费，充值为空
-     * @apiSuccess {String} data.transactionNetwork 交易网络
+     * @apiSuccess {String} data.assetCodeFee 交易手续费币种
+     * @apiSuccess {BigDecimal} data.collectionFee 平台代理手续费
+     * @apiSuccess {String} data.channel 交易渠道
+     * @apiSuccess {String} data.transactionNetwork 交易网络，现阶段转账时为空、提现时为主网资产
      * @apiSuccess {String} data.blockHash 区块哈希
      * @apiSuccess {String} data.blockHeight 区块高度
-     * @apiSuccess {String} data.blockTime 区块时间戳
+     * @apiSuccess {String} data.category 交易子类型
+     * <table><tr><th>类别</th><th>描述</th></tr>
+     * <tr><td>01</td><td>手续费</td></tr>
+     * <tr><td>02</td><td>资金划转</td></tr>
+     * <tr><td>03</td><td>创建地址</td></tr>
+     * <tr><td>04</td><td>服务费</td></tr></table>
+     * @apiSuccess {String} data.bindSerialNumber 关联流水号
+     * @apiSuccess {String} data.apiId apiid
+     * @apiSuccess {String} data.updateTime 最后更新时间
+     * @apiSuccess {String} data.txRemark 交易备注，显示交易错误信息
+     * @apiSuccess {String} data.transactionTimestamp 交易时间戳（废弃）
+     * @apiSuccess {String} data.blockTime 区块时间戳（废弃）
      *
      */
     public ServiceCall<BaseResponse.TransactionsResponse> transactions(TransactionRequest transactionRequest) {

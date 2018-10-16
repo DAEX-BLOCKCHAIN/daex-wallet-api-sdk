@@ -26,17 +26,30 @@ public class Transaction implements Serializable {
      */
     private Integer transactionType;
     /**
+     * 1.收入 2.支出
+     */
+    private Integer capitalFlows;
+    /**
+     * 交易申请时间
+     */
+    private String createTime;
+    /**
      * 交易完成时间
      */
     private String transactionTime;
-    /**
-     * 交易时间戳
-     */
-    private String transactionTimestamp;
+
     /**
      * 交易哈希
      */
     private String txHash;
+    /**
+     * 出账方账户
+     */
+    private String senderAccount;
+    /**
+     * 入账方账户
+     */
+    private String recipientsAccount;
     /**
      * 出账方
      */
@@ -46,6 +59,10 @@ public class Transaction implements Serializable {
      */
     private String recipients;
     /**
+     * memo
+     */
+    private String memo;
+    /**
      * 交易资产
      */
     private String assetCode;
@@ -54,9 +71,21 @@ public class Transaction implements Serializable {
      */
     private BigDecimal assetAmt;
     /**
-     * 手续费
+     * 交易手续费
      */
     private BigDecimal handlingFee;
+    /**
+     * 交易手续费币种
+     */
+    private String assetCodeFee;
+    /**
+     * 平台代理手续费
+     */
+    private BigDecimal collectionFee;
+    /**
+     * 交易渠道
+     */
+    private String channel;
     /**
      * 交易网络
      */
@@ -70,13 +99,34 @@ public class Transaction implements Serializable {
      */
     private String blockHeight;
     /**
-     * 区块时间戳
+     * 类别 01:手续费 02:资金划转 03:创建地址 04:服务费
+     */
+    private String category;
+    /**
+     * 关联流水号
+     */
+    private String bindSerialNumber;
+    /**
+     * apiid
+     */
+    private String apiId;
+    /**
+     * 最后更新时间
+     */
+    private String updateTime;
+    /**
+     * 失败原因
+     */
+    private String txRemark;
+
+    /**
+     * 交易时间戳(废弃)
+     */
+    private String transactionTimestamp;
+    /**
+     * 区块时间戳(废弃)
      */
     private String blockTime;
-
-    private String memo;
-
-    private String txRemark;
 
     public String getSerialNumber() {
         return serialNumber;
@@ -94,6 +144,13 @@ public class Transaction implements Serializable {
         this.outsideSerialNumber = outsideSerialNumber;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public Integer getTransactionType() {
         return transactionType;
@@ -101,6 +158,22 @@ public class Transaction implements Serializable {
 
     public void setTransactionType(Integer transactionType) {
         this.transactionType = transactionType;
+    }
+
+    public Integer getCapitalFlows() {
+        return capitalFlows;
+    }
+
+    public void setCapitalFlows(Integer capitalFlows) {
+        this.capitalFlows = capitalFlows;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
     public String getTransactionTime() {
@@ -111,28 +184,28 @@ public class Transaction implements Serializable {
         this.transactionTime = transactionTime;
     }
 
-    public String getTransactionTimestamp() {
-        return transactionTimestamp;
-    }
-
-    public void setTransactionTimestamp(String transactionTimestamp) {
-        this.transactionTimestamp = transactionTimestamp;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getTxHash() {
         return txHash;
     }
 
     public void setTxHash(String txHash) {
         this.txHash = txHash;
+    }
+
+    public String getSenderAccount() {
+        return senderAccount;
+    }
+
+    public void setSenderAccount(String senderAccount) {
+        this.senderAccount = senderAccount;
+    }
+
+    public String getRecipientsAccount() {
+        return recipientsAccount;
+    }
+
+    public void setRecipientsAccount(String recipientsAccount) {
+        this.recipientsAccount = recipientsAccount;
     }
 
     public String getSender() {
@@ -149,6 +222,14 @@ public class Transaction implements Serializable {
 
     public void setRecipients(String recipients) {
         this.recipients = recipients;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
     }
 
     public String getAssetCode() {
@@ -175,6 +256,30 @@ public class Transaction implements Serializable {
         this.handlingFee = handlingFee;
     }
 
+    public String getAssetCodeFee() {
+        return assetCodeFee;
+    }
+
+    public void setAssetCodeFee(String assetCodeFee) {
+        this.assetCodeFee = assetCodeFee;
+    }
+
+    public BigDecimal getCollectionFee() {
+        return collectionFee;
+    }
+
+    public void setCollectionFee(BigDecimal collectionFee) {
+        this.collectionFee = collectionFee;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
     public String getTransactionNetwork() {
         return transactionNetwork;
     }
@@ -199,20 +304,36 @@ public class Transaction implements Serializable {
         this.blockHeight = blockHeight;
     }
 
-    public String getBlockTime() {
-        return blockTime;
+    public String getCategory() {
+        return category;
     }
 
-    public void setBlockTime(String blockTime) {
-        this.blockTime = blockTime;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public String getMemo() {
-        return memo;
+    public String getBindSerialNumber() {
+        return bindSerialNumber;
     }
 
-    public void setMemo(String memo) {
-        this.memo = memo;
+    public void setBindSerialNumber(String bindSerialNumber) {
+        this.bindSerialNumber = bindSerialNumber;
+    }
+
+    public String getApiId() {
+        return apiId;
+    }
+
+    public void setApiId(String apiId) {
+        this.apiId = apiId;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getTxRemark() {
@@ -221,5 +342,21 @@ public class Transaction implements Serializable {
 
     public void setTxRemark(String txRemark) {
         this.txRemark = txRemark;
+    }
+
+    public String getTransactionTimestamp() {
+        return transactionTimestamp;
+    }
+
+    public void setTransactionTimestamp(String transactionTimestamp) {
+        this.transactionTimestamp = transactionTimestamp;
+    }
+
+    public String getBlockTime() {
+        return blockTime;
+    }
+
+    public void setBlockTime(String blockTime) {
+        this.blockTime = blockTime;
     }
 }
