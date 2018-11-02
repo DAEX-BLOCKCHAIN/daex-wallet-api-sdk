@@ -58,7 +58,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiParam {String} account    用户账户，主账户有权查询子账户资产
      * @apiParam {String} [assetCode]   资产类型,币种缩写（如：BTC），默认为所有资产，若填写，多个资产以"|"分隔
      * @apiParam {Integer=0(否),1(是)} [isHistory=0] 是否查询历史余额
-     * @apiParam {String} [queryDate] 查询日期（格式：yyyy-MM-dd）
+     * @apiParam {String} [queryDate] 查询日期，isHistory=0无需不填，isHistory=1必须填写（格式：yyyy-MM-dd）
      * @apiSuccess {String} status 请求返回状态
      * @apiSuccess {String} message 请求返回提示信息
      * @apiSuccess {Object} data 请求返回信息
@@ -131,6 +131,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {String} data.apiId API ID
      * @apiSuccess {String} data.updateTime 最后更新时间
      * @apiSuccess {String} data.txRemark 交易备注，包含交易错误信息
+     * @apiSuccess {String} data.nounce 包括nounce的提现预留
      */
     public ServiceCall<BaseResponse.TransactionResponse> transaction(TransactionRequest transactionRequest) {
         String[] pathSegments = {BASE_URL, "getTransaction"};
@@ -206,6 +207,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {String} data.apiId API ID
      * @apiSuccess {String} data.updateTime 最后更新时间
      * @apiSuccess {String} data.txRemark 交易备注，包含交易错误信息
+     * @apiSuccess {String} data.nounce 包括nounce的提现预留
      */
     public ServiceCall<BaseResponse.TransactionsResponse> transactions(TransactionRequest transactionRequest) {
         String[] pathSegments = {BASE_URL, "getTransactionList"};

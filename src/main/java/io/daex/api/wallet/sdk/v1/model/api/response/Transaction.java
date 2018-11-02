@@ -118,6 +118,14 @@ public class Transaction implements Serializable {
      * 失败原因
      */
     private String txRemark;
+    /**
+     * 提现预留
+     */
+    private String nounce;
+    /**
+     * 唯一
+     */
+    private String version;
 
     /**
      * 交易时间戳(废弃)
