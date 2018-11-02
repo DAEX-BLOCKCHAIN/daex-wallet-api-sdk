@@ -131,7 +131,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {String} data.apiId API ID
      * @apiSuccess {String} data.updateTime 最后更新时间
      * @apiSuccess {String} data.txRemark 交易备注，包含交易错误信息
-     * @apiSuccess {String} data.nounce 包括nounce的提现预留
+     * @apiSuccess {String} data.nounce 包括nounce在内的提现预留信息
      */
     public ServiceCall<BaseResponse.TransactionResponse> transaction(TransactionRequest transactionRequest) {
         String[] pathSegments = {BASE_URL, "getTransaction"};
@@ -207,7 +207,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {String} data.apiId API ID
      * @apiSuccess {String} data.updateTime 最后更新时间
      * @apiSuccess {String} data.txRemark 交易备注，包含交易错误信息
-     * @apiSuccess {String} data.nounce 包括nounce的提现预留
+     * @apiSuccess {String} data.nounce 包括nounce的提现预留信息
      */
     public ServiceCall<BaseResponse.TransactionsResponse> transactions(TransactionRequest transactionRequest) {
         String[] pathSegments = {BASE_URL, "getTransactionList"};

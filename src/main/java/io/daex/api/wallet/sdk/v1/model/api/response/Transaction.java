@@ -367,4 +367,20 @@ public class Transaction implements Serializable {
     public void setBlockTime(String blockTime) {
         this.blockTime = blockTime;
     }
+
+    public String getNounce() {
+        return nounce;
+    }
+
+    public void setNounce(String nounce) {
+        this.nounce = nounce;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
 }
