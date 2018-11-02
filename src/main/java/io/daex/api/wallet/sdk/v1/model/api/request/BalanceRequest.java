@@ -17,6 +17,15 @@ public class BalanceRequest implements Serializable {
      */
     private String assetCode;
 
+    /**
+     * 是否查询历史余额 (O)  默认0.否 1.是
+     */
+    private Integer isHistory;
+    /**
+     * 查询日期 (O) 格式 ：2018-10-01
+     */
+    private String queryDate;
+
     public String getAccount() {
         return account;
     }
@@ -37,4 +46,19 @@ public class BalanceRequest implements Serializable {
         this.assetCode = result.substring(0, result.length() - 1);
     }
 
+    public Integer getIsHistory() {
+        return isHistory;
+    }
+
+    public void setIsHistory(Integer isHistory) {
+        this.isHistory = isHistory;
+    }
+
+    public String getQueryDate() {
+        return queryDate;
+    }
+
+    public void setQueryDate(String queryDate) {
+        this.queryDate = queryDate;
+    }
 }

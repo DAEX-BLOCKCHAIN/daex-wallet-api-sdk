@@ -19,6 +19,10 @@ public class WalletAddressRequest implements Serializable {
      * 地址数量
      */
     private Integer addressCount = 100;
+    /**
+     * 地址生成方式 01.单个  02.批量
+     */
+    private String mode;
 
     public String getAccount() {
         return account;
@@ -44,4 +48,11 @@ public class WalletAddressRequest implements Serializable {
         this.addressCount = addressCount;
     }
 
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
 }
