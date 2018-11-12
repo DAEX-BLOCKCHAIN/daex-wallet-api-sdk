@@ -5,5 +5,5 @@ DAEX Wallet为用户提供了三种API类型，管理API（mAPI）、交易API�
 
 * [DAEX Wallet API Interface](http://www.daex.pro/doc/)
 * [DAEX Wallet API JAVA SDK Demo](https://github.com/DAEX-BLOCKCHAIN/daex-wallet-api-sdk/wiki/DAEX-Wallet-API-JAVA-SDK-Demo)
-* [Wallet Api Apply Document](https://github.com/DAEX-BLOCKCHAIN/daex-wallet-api-sdk/wiki/Wallet-Api-Apply-Document)
+* [DAEX Wallet API Apply Document](https://github.com/DAEX-BLOCKCHAIN/daex-wallet-api-sdk/wiki/DAEX-Wallet-API-Apply-Document)
 * [DAEX Wallet Data Signature Standard](https://github.com/DAEX-BLOCKCHAIN/daex-wallet-api-sdk/wiki/DAEX-Wallet-Data-Signature-Standard)
