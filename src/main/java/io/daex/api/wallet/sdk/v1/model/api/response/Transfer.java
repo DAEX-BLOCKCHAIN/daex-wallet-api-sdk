@@ -10,12 +10,12 @@ public class Transfer implements Serializable {
     /**
      * 转账流水号
      */
-    private String bizNumber;
+    private String internalOrderNumber;
 
     /**
      * 外部流水号
      */
-    private String outNumber;
+    private String externalOrderNumber;
 
     /**
      * 交易状态
@@ -30,22 +30,22 @@ public class Transfer implements Serializable {
     /**
      * 交易完成时间
      */
-    private String sucTime;
+    private String txCompletionTime;
 
-    public String getBizNumber() {
-        return bizNumber;
+    public String getInternalOrderNumber() {
+        return internalOrderNumber;
     }
 
-    public void setBizNumber(String bizNumber) {
-        this.bizNumber = bizNumber;
+    public void setInternalOrderNumber(String internalOrderNumber) {
+        this.internalOrderNumber = internalOrderNumber;
     }
 
-    public String getOutNumber() {
-        return outNumber;
+    public String getExternalOrderNumber() {
+        return externalOrderNumber;
     }
 
-    public void setOutNumber(String outNumber) {
-        this.outNumber = outNumber;
+    public void setExternalOrderNumber(String externalOrderNumber) {
+        this.externalOrderNumber = externalOrderNumber;
     }
 
     public String getStatus() {
@@ -64,11 +64,11 @@ public class Transfer implements Serializable {
         this.describe = describe;
     }
 
-    public String getSucTime() {
-        return sucTime;
+    public String getTxCompletionTime() {
+        return txCompletionTime;
     }
 
-    public void setSucTime(String sucTime) {
-        this.sucTime = sucTime;
+    public void setTxCompletionTime(String txCompletionTime) {
+        this.txCompletionTime = txCompletionTime;
     }
 }

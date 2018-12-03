@@ -19,7 +19,7 @@ public class DrawEntity implements Serializable {
     /**
      * 外部流水号
      */
-    private String outNumber;
+    private String externalOrderNumber;
     /**
      * 备注
      */
@@ -32,7 +32,8 @@ public class DrawEntity implements Serializable {
     /**
      * 平台代理手续费
      */
-    private BigDecimal customerInfoFees;
+    private BigDecimal platformFee;
+
 
     public String getPutAddress() {
         return putAddress;
@@ -50,12 +51,12 @@ public class DrawEntity implements Serializable {
         this.putAmount = putAmount;
     }
 
-    public String getOutNumber() {
-        return outNumber;
+    public String getExternalOrderNumber() {
+        return externalOrderNumber;
     }
 
-    public void setOutNumber(String outNumber) {
-        this.outNumber = outNumber;
+    public void setExternalOrderNumber(String externalOrderNumber) {
+        this.externalOrderNumber = externalOrderNumber;
     }
 
     public String getRemark() {
@@ -74,11 +75,11 @@ public class DrawEntity implements Serializable {
         this.memo = memo;
     }
 
-    public BigDecimal getCustomerInfoFees() {
-        return customerInfoFees;
+    public BigDecimal getPlatformFee() {
+        return platformFee;
     }
 
-    public void setCustomerInfoFees(BigDecimal customerInfoFees) {
-        this.customerInfoFees = customerInfoFees;
+    public void setPlatformFee(BigDecimal platformFee) {
+        this.platformFee = platformFee;
     }
 }

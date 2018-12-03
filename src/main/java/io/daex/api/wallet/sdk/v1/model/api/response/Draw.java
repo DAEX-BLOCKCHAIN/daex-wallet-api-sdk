@@ -11,12 +11,12 @@ public class Draw implements Serializable {
     /**
      * 提现流水号（清算链交易哈希）
      */
-    private String bizNumber;
+    private String internalOrderNumber;
 
     /**
      * 外部流水号
      */
-    private String outNumber;
+    private String externalOrderNumber;
 
     /**
      * 交易状态
@@ -35,22 +35,22 @@ public class Draw implements Serializable {
     /**
      * 申请完成时间
      */
-    private String applyTime;
+    private String txTime;
 
-    public String getBizNumber() {
-        return bizNumber;
+    public String getInternalOrderNumber() {
+        return internalOrderNumber;
     }
 
-    public void setBizNumber(String bizNumber) {
-        this.bizNumber = bizNumber;
+    public void setInternalOrderNumber(String internalOrderNumber) {
+        this.internalOrderNumber = internalOrderNumber;
     }
 
-    public String getOutNumber() {
-        return outNumber;
+    public String getExternalOrderNumber() {
+        return externalOrderNumber;
     }
 
-    public void setOutNumber(String outNumber) {
-        this.outNumber = outNumber;
+    public void setExternalOrderNumber(String externalOrderNumber) {
+        this.externalOrderNumber = externalOrderNumber;
     }
 
     public String getStatus() {
@@ -77,11 +77,11 @@ public class Draw implements Serializable {
         this.confirmCode = confirmCode;
     }
 
-    public String getApplyTime() {
-        return applyTime;
+    public String getTxTime() {
+        return txTime;
     }
 
-    public void setApplyTime(String applyTime) {
-        this.applyTime = applyTime;
+    public void setTxTime(String txTime) {
+        this.txTime = txTime;
     }
 }

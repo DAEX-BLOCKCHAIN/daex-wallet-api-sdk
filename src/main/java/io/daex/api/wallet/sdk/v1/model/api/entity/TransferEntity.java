@@ -10,7 +10,7 @@ public class TransferEntity implements Serializable {
     /**
      * 收款人账户（M）
      */
-    private String receAccount;
+    private String recipientsAccount;
     /**
      * 付款金额（M）
      */
@@ -18,18 +18,18 @@ public class TransferEntity implements Serializable {
     /**
      * 外部流水号（O）
      */
-    private String outNumber;
+    private String externalOrderNumber;
     /**
      * 备注（O）
      */
     private String remark;
 
-    public String getReceAccount() {
-        return receAccount;
+    public String getRecipientsAccount() {
+        return recipientsAccount;
     }
 
-    public void setReceAccount(String receAccount) {
-        this.receAccount = receAccount;
+    public void setRecipientsAccount(String recipientsAccount) {
+        this.recipientsAccount = recipientsAccount;
     }
 
     public BigDecimal getPayAmount() {
@@ -40,12 +40,12 @@ public class TransferEntity implements Serializable {
         this.payAmount = payAmount;
     }
 
-    public String getOutNumber() {
-        return outNumber;
+    public String getExternalOrderNumber() {
+        return externalOrderNumber;
     }
 
-    public void setOutNumber(String outNumber) {
-        this.outNumber = outNumber;
+    public void setExternalOrderNumber(String externalOrderNumber) {
+        this.externalOrderNumber = externalOrderNumber;
     }
 
     public String getRemark() {

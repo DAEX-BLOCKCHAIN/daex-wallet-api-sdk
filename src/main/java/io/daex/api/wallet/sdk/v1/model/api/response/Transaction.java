@@ -12,11 +12,11 @@ public class Transaction implements Serializable {
     /**
      * 流水号
      */
-    private String serialNumber;
+    private String internalOrderNumber;
     /**
      * 外部流水号
      */
-    private String outsideSerialNumber;
+    private String externalOrderNumber;
     /**
      * 交易状态
      */
@@ -24,19 +24,19 @@ public class Transaction implements Serializable {
     /**
      * 交易类型
      */
-    private Integer transactionType;
+    private Integer txType;
     /**
      * 1.收入 2.支出
      */
-    private Integer capitalFlows;
+    private Integer fundFlow;
     /**
      * 交易申请时间
      */
-    private String createTime;
+    private String txTime;
     /**
      * 交易完成时间
      */
-    private String transactionTime;
+    private String txCompletionTime;
 
     /**
      * 交易哈希
@@ -73,15 +73,15 @@ public class Transaction implements Serializable {
     /**
      * 交易手续费
      */
-    private BigDecimal handlingFee;
+    private BigDecimal txFees;
     /**
      * 交易手续费币种
      */
-    private String assetCodeFee;
+    private String feeToken;
     /**
      * 平台代理手续费
      */
-    private BigDecimal collectionFee;
+    private BigDecimal platformFee;
     /**
      * 交易渠道
      */
@@ -89,7 +89,7 @@ public class Transaction implements Serializable {
     /**
      * 交易网络
      */
-    private String transactionNetwork;
+    private String txNetwork;
     /**
      * 区块哈希
      */
@@ -113,7 +113,7 @@ public class Transaction implements Serializable {
     /**
      * 最后更新时间
      */
-    private String updateTime;
+    private String lastUpdateTime;
     /**
      * 失败原因
      */
@@ -122,34 +122,29 @@ public class Transaction implements Serializable {
      * 提现预留
      */
     private String nounce;
-    /**
-     * 唯一
-     */
-    private String version;
 
-    /**
-     * 交易时间戳(废弃)
-     */
-    private String transactionTimestamp;
-    /**
-     * 区块时间戳(废弃)
-     */
-    private String blockTime;
-
-    public String getSerialNumber() {
-        return serialNumber;
+    public String getNounce() {
+        return nounce;
     }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
+    public void setNounce(String nounce) {
+        this.nounce = nounce;
     }
 
-    public String getOutsideSerialNumber() {
-        return outsideSerialNumber;
+    public String getInternalOrderNumber() {
+        return internalOrderNumber;
     }
 
-    public void setOutsideSerialNumber(String outsideSerialNumber) {
-        this.outsideSerialNumber = outsideSerialNumber;
+    public void setInternalOrderNumber(String internalOrderNumber) {
+        this.internalOrderNumber = internalOrderNumber;
+    }
+
+    public String getExternalOrderNumber() {
+        return externalOrderNumber;
+    }
+
+    public void setExternalOrderNumber(String externalOrderNumber) {
+        this.externalOrderNumber = externalOrderNumber;
     }
 
     public String getStatus() {
@@ -160,36 +155,36 @@ public class Transaction implements Serializable {
         this.status = status;
     }
 
-    public Integer getTransactionType() {
-        return transactionType;
+    public Integer getTxType() {
+        return txType;
     }
 
-    public void setTransactionType(Integer transactionType) {
-        this.transactionType = transactionType;
+    public void setTxType(Integer txType) {
+        this.txType = txType;
     }
 
-    public Integer getCapitalFlows() {
-        return capitalFlows;
+    public Integer getFundFlow() {
+        return fundFlow;
     }
 
-    public void setCapitalFlows(Integer capitalFlows) {
-        this.capitalFlows = capitalFlows;
+    public void setFundFlow(Integer fundFlow) {
+        this.fundFlow = fundFlow;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public String getTxTime() {
+        return txTime;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setTxTime(String txTime) {
+        this.txTime = txTime;
     }
 
-    public String getTransactionTime() {
-        return transactionTime;
+    public String getTxCompletionTime() {
+        return txCompletionTime;
     }
 
-    public void setTransactionTime(String transactionTime) {
-        this.transactionTime = transactionTime;
+    public void setTxCompletionTime(String txCompletionTime) {
+        this.txCompletionTime = txCompletionTime;
     }
 
     public String getTxHash() {
@@ -256,28 +251,28 @@ public class Transaction implements Serializable {
         this.assetAmt = assetAmt;
     }
 
-    public BigDecimal getHandlingFee() {
-        return handlingFee;
+    public BigDecimal getTxFees() {
+        return txFees;
     }
 
-    public void setHandlingFee(BigDecimal handlingFee) {
-        this.handlingFee = handlingFee;
+    public void setTxFees(BigDecimal txFees) {
+        this.txFees = txFees;
     }
 
-    public String getAssetCodeFee() {
-        return assetCodeFee;
+    public String getFeeToken() {
+        return feeToken;
     }
 
-    public void setAssetCodeFee(String assetCodeFee) {
-        this.assetCodeFee = assetCodeFee;
+    public void setFeeToken(String feeToken) {
+        this.feeToken = feeToken;
     }
 
-    public BigDecimal getCollectionFee() {
-        return collectionFee;
+    public BigDecimal getPlatformFee() {
+        return platformFee;
     }
 
-    public void setCollectionFee(BigDecimal collectionFee) {
-        this.collectionFee = collectionFee;
+    public void setPlatformFee(BigDecimal platformFee) {
+        this.platformFee = platformFee;
     }
 
     public String getChannel() {
@@ -288,12 +283,12 @@ public class Transaction implements Serializable {
         this.channel = channel;
     }
 
-    public String getTransactionNetwork() {
-        return transactionNetwork;
+    public String getTxNetwork() {
+        return txNetwork;
     }
 
-    public void setTransactionNetwork(String transactionNetwork) {
-        this.transactionNetwork = transactionNetwork;
+    public void setTxNetwork(String txNetwork) {
+        this.txNetwork = txNetwork;
     }
 
     public String getBlockHash() {
@@ -336,12 +331,12 @@ public class Transaction implements Serializable {
         this.apiId = apiId;
     }
 
-    public String getUpdateTime() {
-        return updateTime;
+    public String getLastUpdateTime() {
+        return lastUpdateTime;
     }
 
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
+    public void setLastUpdateTime(String lastUpdateTime) {
+        this.lastUpdateTime = lastUpdateTime;
     }
 
     public String getTxRemark() {
@@ -350,37 +345,5 @@ public class Transaction implements Serializable {
 
     public void setTxRemark(String txRemark) {
         this.txRemark = txRemark;
-    }
-
-    public String getTransactionTimestamp() {
-        return transactionTimestamp;
-    }
-
-    public void setTransactionTimestamp(String transactionTimestamp) {
-        this.transactionTimestamp = transactionTimestamp;
-    }
-
-    public String getBlockTime() {
-        return blockTime;
-    }
-
-    public void setBlockTime(String blockTime) {
-        this.blockTime = blockTime;
-    }
-
-    public String getNounce() {
-        return nounce;
-    }
-
-    public void setNounce(String nounce) {
-        this.nounce = nounce;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
     }
 }

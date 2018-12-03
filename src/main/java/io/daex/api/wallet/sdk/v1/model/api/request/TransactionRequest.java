@@ -11,7 +11,7 @@ public class TransactionRequest implements Serializable {
     /**
      * 交易类型  01.充值 02.提现 03.转账
      */
-    private Integer tranType;
+    private Integer txType;
     /**
      * 资产
      */
@@ -19,7 +19,7 @@ public class TransactionRequest implements Serializable {
     /**
      * 流水号
      */
-    private String serialNumber;
+    private String internalOrderNumber;
     /**
      * 用户账户
      */
@@ -43,12 +43,12 @@ public class TransactionRequest implements Serializable {
      */
     private Integer limit = 10;
 
-    public Integer getTranType() {
-        return tranType;
+    public Integer getTxType() {
+        return txType;
     }
 
-    public void setTranType(Integer tranType) {
-        this.tranType = tranType;
+    public void setTxType(Integer txType) {
+        this.txType = txType;
     }
 
     public String getAssetCode() {
@@ -59,14 +59,29 @@ public class TransactionRequest implements Serializable {
         this.assetCode = assetCode;
     }
 
-    public String getSerialNumber() {
-        return serialNumber;
+    public String getInternalOrderNumber() {
+        return internalOrderNumber;
     }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
+    public void setInternalOrderNumber(String internalOrderNumber) {
+        this.internalOrderNumber = internalOrderNumber;
     }
 
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public Integer getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(Integer accountType) {
+        this.accountType = accountType;
+    }
 
     public String getStartDate() {
         return startDate;
@@ -90,21 +105,5 @@ public class TransactionRequest implements Serializable {
 
     public void setLimit(Integer limit) {
         this.limit = limit;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public Integer getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(Integer accountType) {
-        this.accountType = accountType;
     }
 }

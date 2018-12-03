@@ -11,7 +11,7 @@ public class DrawConfirm implements Serializable {
     /**
      * 提现流水号（清算链交易哈希）
      */
-    private String bizNumber;
+    private String internalOrderNumber;
 
     /**
      * 提现复核结果
@@ -21,19 +21,19 @@ public class DrawConfirm implements Serializable {
     /**
      * 交易完成时间
      */
-    private String sucTime;
+    private String txTime;
 
     /**
      * 交易说明
      */
     private String describe;
 
-    public String getBizNumber() {
-        return bizNumber;
+    public String getInternalOrderNumber() {
+        return internalOrderNumber;
     }
 
-    public void setBizNumber(String bizNumber) {
-        this.bizNumber = bizNumber;
+    public void setInternalOrderNumber(String internalOrderNumber) {
+        this.internalOrderNumber = internalOrderNumber;
     }
 
     public String getStatus() {
@@ -44,12 +44,12 @@ public class DrawConfirm implements Serializable {
         this.status = status;
     }
 
-    public String getSucTime() {
-        return sucTime;
+    public String getTxTime() {
+        return txTime;
     }
 
-    public void setSucTime(String sucTime) {
-        this.sucTime = sucTime;
+    public void setTxTime(String txTime) {
+        this.txTime = txTime;
     }
 
     public String getDescribe() {
