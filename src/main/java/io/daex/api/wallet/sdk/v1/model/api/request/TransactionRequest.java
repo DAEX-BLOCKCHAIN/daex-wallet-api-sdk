@@ -39,9 +39,18 @@ public class TransactionRequest implements Serializable {
      */
     private String endDate;
     /**
+     * 索引结果从某个特定数起始（默认值为0）
+     */
+    private Integer start = 0;
+    /**
      * 返回条数
      */
-    private Integer limit = 10;
+    private Integer limit = 100;
+
+    /**
+     * 子账户
+     */
+    private String subAccount;
 
     public Integer getTxType() {
         return txType;
@@ -105,5 +114,21 @@ public class TransactionRequest implements Serializable {
 
     public void setLimit(Integer limit) {
         this.limit = limit;
+    }
+
+    public Integer getStart() {
+        return start;
+    }
+
+    public void setStart(Integer start) {
+        this.start = start;
+    }
+
+    public String getSubAccount() {
+        return subAccount;
+    }
+
+    public void setSubAccount(String subAccount) {
+        this.subAccount = subAccount;
     }
 }

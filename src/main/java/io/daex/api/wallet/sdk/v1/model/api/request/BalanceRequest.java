@@ -25,6 +25,14 @@ public class BalanceRequest implements Serializable {
      * 查询日期 (O) 格式 ：2018-10-01
      */
     private String queryDate;
+    /**
+     * 账户类型 (O) 默认1.查询当前账户 2.手续费账户 3.子账户
+     */
+    private Integer accountType;
+    /**
+     * 子账户 (O) 账户类型为3时必填, 用户名或者邮箱号
+     */
+    private String subAccount;
 
     public String getAccount() {
         return account;
@@ -60,5 +68,21 @@ public class BalanceRequest implements Serializable {
 
     public void setQueryDate(String queryDate) {
         this.queryDate = queryDate;
+    }
+
+    public Integer getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(Integer accountType) {
+        this.accountType = accountType;
+    }
+
+    public String getSubAccount() {
+        return subAccount;
+    }
+
+    public void setSubAccount(String subAccount) {
+        this.subAccount = subAccount;
     }
 }

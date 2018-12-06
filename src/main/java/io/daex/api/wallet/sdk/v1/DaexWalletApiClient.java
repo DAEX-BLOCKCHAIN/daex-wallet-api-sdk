@@ -58,7 +58,13 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiParam {String} account    用户账户，主账户有权查询子账户资产
      * @apiParam {String} [assetCode]   资产类型,币种缩写（如：BTC），默认为所有资产，若填写，多个资产以"|"分隔
      * @apiParam {Integer=0(否),1(是)} [isHistory=0] 是否查询历史余额
-     * @apiParam {String} [queryDate] 查询日期，isHistory=0无需不填，isHistory=1必须填写（格式：yyyy-MM-dd）
+     * @apiParam {String} [queryDate] 查询日期，isHistory=0无需填写，isHistory=1必须填写（格式：yyyy-MM-dd）
+     * @apiParam {Integer=1,2,3} [accountType=1] 账户类型
+     * <table><tr><th>账户类型</th><th>描述</th></tr>
+     * <tr><td>1</td><td>查询当前账户</td></tr>
+     * <tr><td>2</td><td>手续费账户</td></tr>
+     * <tr><td>3</td><td>子账户</td></tr></table>
+     * @apiParam {String} [subAccount] 子账户，账户类型为3时必填，用户名或者邮箱号
      * @apiSuccess {String} status 请求返回状态
      * @apiSuccess {String} message 请求返回提示信息
      * @apiSuccess {Object} data 请求返回信息
@@ -152,13 +158,15 @@ public class DaexWalletApiClient extends DaexClient {
      * <tr><td>1</td><td>充值</td></tr>
      * <tr><td>2</td><td>提现</td></tr>
      * <tr><td>3</td><td>转账</td></tr></table>
-     * @apiParam {Integer{1-1000}} [limit=10]    返回条数，当时间区间里的交易记录大于1000条时，以交易时间倒序取最近的1000条。
+     * @apiParam {Integer{1-1000}} [limit=100]    返回条数，当时间区间里的交易记录大于1000条时，以交易时间倒序取最近的1000条。
      * @apiParam {String} [assetCode]    资产种类，默认为所有资产。多个资产以逗号分隔
      * @apiParam {Integer=1,2,3} [accountType=1] 账户类型
      * <table><tr><th>账户类型</th><th>描述</th></tr>
      * <tr><td>1</td><td>管理员账户</td></tr>
      * <tr><td>2</td><td>管理员手续费账户</td>
      * </tr><tr><td>3</td><td>子管理员账户</td></tr></table>
+     * @apiParam {Integer} [start=0] 索引结果从某个特定数起始
+     * @apiParam {String} [subAccount] 子账户
      * @apiSuccess {String} status 请求返回状态
      * @apiSuccess {String} message 请求返回提示信息
      * @apiSuccess {List} data 请求返回信息
@@ -456,7 +464,13 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiParam {String} account    用户账户，主账户有权查询子账户资产
      * @apiParam {String} [assetCode]   资产类型,币种缩写（如：BTC），默认为所有资产，若填写，多个资产以"|"分隔
      * @apiParam {Integer=0(否),1(是)} [isHistory=0] 是否查询历史余额
-     * @apiParam {String} [queryDate] 查询日期，isHistory=0无需不填，isHistory=1必须填写（格式：yyyy-MM-dd）
+     * @apiParam {String} [queryDate] 查询日期，isHistory=0无需填写，isHistory=1必须填写（格式：yyyy-MM-dd）
+     * @apiParam {Integer=1,2,3} [accountType=1] 账户类型
+     * <table><tr><th>账户类型</th><th>描述</th></tr>
+     * <tr><td>1</td><td>查询当前账户</td></tr>
+     * <tr><td>2</td><td>手续费账户</td></tr>
+     * <tr><td>3</td><td>子账户</td></tr></table>
+     * @apiParam {String} [subAccount] 子账户，账户类型为3时必填，用户名或者邮箱号
      * @apiParamExample {quest} Request-Example:
      *  account=accountName&assetCode=DAX|BTC|DAX
      * @apiSuccess {String} status 请求返回状态
@@ -620,13 +634,15 @@ public class DaexWalletApiClient extends DaexClient {
      * <tr><td>1</td><td>充值</td></tr>
      * <tr><td>2</td><td>提现</td></tr>
      * <tr><td>3</td><td>转账</td></tr></table>
-     * @apiParam {Integer{1-1000}} [limit=10]    返回条数，当时间区间里的交易记录大于1000条时，以交易时间倒序取最近的1000条。
+     * @apiParam {Integer{1-1000}} [limit=100]    返回条数，当时间区间里的交易记录大于1000条时，以交易时间倒序取最近的1000条。
      * @apiParam {String} [assetCode]    资产种类，默认为所有资产。多个资产以逗号分隔
      * @apiParam {Integer=1,2,3} [accountType=1] 账户类型
      * <table><tr><th>账户类型</th><th>描述</th></tr>
      * <tr><td>1</td><td>管理员账户</td></tr>
      * <tr><td>2</td><td>管理员手续费账户</td>
      * </tr><tr><td>3</td><td>子管理员账户</td></tr></table>
+     * @apiParam {Integer} [start=0] 索引结果从某个特定数起始
+     * @apiParam {String} [subAccount] 子账户
      * @apiParamExample {quest} Request-Example:
      *  account=accountName&limit=2
      * @apiSuccess {String} status 请求返回状态
