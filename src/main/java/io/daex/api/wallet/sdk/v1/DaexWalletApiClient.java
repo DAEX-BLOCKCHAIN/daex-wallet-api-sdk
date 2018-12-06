@@ -79,7 +79,9 @@ public class DaexWalletApiClient extends DaexClient {
     public ServiceCall<BaseResponse.BalancesResponse> balanceStatistical(BalanceRequest balanceRequest) {
         String[] pathSegments = {BASE_URL, "getBalance"};
         RequestBuilder builder = RequestBuilder.get(RequestBuilder.constructHttpUrl(getEndPoint(), pathSegments))
-                .query("account", balanceRequest.getAccount(), "assetCode", balanceRequest.getAssetCode());
+                .query("account", balanceRequest.getAccount(), "assetCode", balanceRequest.getAssetCode()
+                        , "isHistory", balanceRequest.getIsHistory(), "queryDate", balanceRequest.getQueryDate()
+                        , "accountType", balanceRequest.getAccountType(), "subAccount", balanceRequest.getSubAccount());
         return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.BalancesResponse.class), builder.getJsonBody());
     }
 
@@ -223,7 +225,8 @@ public class DaexWalletApiClient extends DaexClient {
                 .query("assetCode", transactionRequest.getAssetCode(), "account", transactionRequest.getAccount()
                         , "endDate", transactionRequest.getEndDate(), "limit", transactionRequest.getLimit()
                         , "startDate", transactionRequest.getStartDate(), "txType", transactionRequest.getTxType()
-                        , "accountType", transactionRequest.getAccountType());
+                        , "accountType", transactionRequest.getAccountType(), "start", transactionRequest.getStart()
+                        , "subAccount", transactionRequest.getSubAccount());
         return createServiceCall(builder.build(), ResponseConverterUtils.getObject(BaseResponse.TransactionsResponse.class));
     }
 
