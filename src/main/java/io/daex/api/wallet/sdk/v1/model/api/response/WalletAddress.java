@@ -41,6 +41,11 @@ public class WalletAddress implements Serializable {
      */
     private List<AddressEntity> addressData;
 
+    /**
+     * 剩余可用额度
+     */
+    private Integer usableQuota;
+
     public String getAccount() {
         return account;
     }
@@ -87,5 +92,13 @@ public class WalletAddress implements Serializable {
 
     public void setAddressData(List<AddressEntity> addressData) {
         this.addressData = addressData;
+    }
+
+    public Integer getUsableQuota() {
+        return usableQuota;
+    }
+
+    public void setUsableQuota(Integer usableQuota) {
+        this.usableQuota = usableQuota;
     }
 }

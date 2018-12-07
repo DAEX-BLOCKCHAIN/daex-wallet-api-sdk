@@ -24,6 +24,11 @@ public class WalletAddressRequest implements Serializable {
      */
     private String mode;
 
+    /**
+     * 支付方式 默认 01.使用已有额度支付 02.超过额度后使用DAX支付
+     */
+    private String paymentType;
+
     public String getAccount() {
         return account;
     }
@@ -54,5 +59,13 @@ public class WalletAddressRequest implements Serializable {
 
     public void setMode(String mode) {
         this.mode = mode;
+    }
+
+    public String getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
     }
 }

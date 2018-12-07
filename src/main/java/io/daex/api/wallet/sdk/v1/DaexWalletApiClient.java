@@ -32,6 +32,10 @@ public class DaexWalletApiClient extends DaexClient {
      * <tr><td>01</td><td>单个</td></tr>
      * <tr><td>02</td><td>批量</td></tr></table>
      * @apiParam {Integer{50-1000}} [addressCount]   创建的地址数量(mode=01不需填写，mode=02必须填写)
+     * @apiParam {String=01, 02} [paymentType=1] 支付方式
+     * <table><tr><th>地址生成方式</th><th>描述</th></tr>
+     * <tr><td>01</td><td>使用已有额度支付</td></tr>
+     * <tr><td>02</td><td>超过额度后使用DAX支付</td></tr></table>
      * @apiSuccess {String} status 请求返回状态
      * @apiSuccess {String} message 请求返回提示信息
      * @apiSuccess {Object} data 请求返回信息
@@ -40,6 +44,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {BigDecimal} data.cost 创建费用，消耗的DAX数量
      * @apiSuccess {String} data.assetCode 资产类型,币种缩写（如：BTC）
      * @apiSuccess {Integer} data.addressCount 新建的地址数量
+     * @apiSuccess {Integer} data.usableQuota 剩余可用额度
      * @apiSuccess {List} data.addressData 地址信息列表
      * @apiSuccess {String} data.addressData.address 新增地址
      * @apiSuccess {String} data.addressData.memo 地址标签（memo）
@@ -171,53 +176,55 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiParam {String} [subAccount] 子账户
      * @apiSuccess {String} status 请求返回状态
      * @apiSuccess {String} message 请求返回提示信息
-     * @apiSuccess {List} data 请求返回信息
-     * @apiSuccess {String} data.internalOrderNumber 交易流水号
-     * @apiSuccess {String} data.externalOrderNumber 外部流水号
-     * @apiSuccess {String} data.status 交易状态
+     * @apiSuccess {Object} data 请求返回信息
+     * @apiSuccess {Integer} data.totalCount 清单总数
+     * @apiSuccess {Object} data.list 清单列表
+     * @apiSuccess {String} data.list.internalOrderNumber 交易流水号
+     * @apiSuccess {String} data.list.externalOrderNumber 外部流水号
+     * @apiSuccess {String} data.list.status 交易状态
      * <table><tr><th>交易状态</th><th>描述</th></tr>
      * <tr><td>01</td><td>交易完成</td></tr>
      * <tr><td>02</td><td>交易待处理</td></tr>
      * <tr><td>03</td><td>交易失败</td></tr>
      * <tr><td>04</td><td>提现待确认</td></tr>
      * <tr><td>05</td><td>提现撤销</td></tr></table>
-     * @apiSuccess {Integer} data.txType 交易类型
+     * @apiSuccess {Integer} data.list.txType 交易类型
      * <table><tr><th>交易类型</th><th>描述</th></tr>
      * <tr><td>1</td><td>充值</td></tr>
      * <tr><td>2</td><td>提现</td></tr>
      * <tr><td>3</td><td>转账</td></tr></table>
-     * @apiSuccess {Integer} data.fundFlow 资金流向
+     * @apiSuccess {Integer} data.list.fundFlow 资金流向
      * <table><tr><th>资金流向</th><th>描述</th></tr>
      * <tr><td>1</td><td>收入</td></tr>
      * <tr><td>2</td><td>支出</td></tr></table>
-     * @apiSuccess {String} data.txTime 交易申请时间（格式：yyyy-MM-dd HH:mm:ss）
-     * @apiSuccess {String} data.txCompletionTime 交易完成时间（格式：yyyy-MM-dd HH:mm:ss）
-     * @apiSuccess {String} data.txHash 交易哈希
-     * @apiSuccess {String} data.senderAccount 出账账户
-     * @apiSuccess {String} data.recipientsAccount 入账账户
-     * @apiSuccess {String} data.sender 出账地址
-     * @apiSuccess {String} data.recipients 入账地址
-     * @apiSuccess {String} data.memo 入账地址标签（memo）
-     * @apiSuccess {String} data.assetCode 交易资产缩写
-     * @apiSuccess {BigDecimal} data.assetAmt 金额
-     * @apiSuccess {BigDecimal} data.txFees 交易手续费
-     * @apiSuccess {String} data.feeToken 交易手续费币种
-     * @apiSuccess {BigDecimal} data.platformFee 平台代理手续费
-     * @apiSuccess {String} data.channel 交易渠道
-     * @apiSuccess {String} data.txNetwork 交易网络
-     * @apiSuccess {String} data.blockHash 区块哈希
-     * @apiSuccess {String} data.blockHeight 区块高度
-     * @apiSuccess {String} data.category 交易子类型
+     * @apiSuccess {String} data.list.txTime 交易申请时间（格式：yyyy-MM-dd HH:mm:ss）
+     * @apiSuccess {String} data.list.txCompletionTime 交易完成时间（格式：yyyy-MM-dd HH:mm:ss）
+     * @apiSuccess {String} data.list.txHash 交易哈希
+     * @apiSuccess {String} data.list.senderAccount 出账账户
+     * @apiSuccess {String} data.list.recipientsAccount 入账账户
+     * @apiSuccess {String} data.list.sender 出账地址
+     * @apiSuccess {String} data.list.recipients 入账地址
+     * @apiSuccess {String} data.list.memo 入账地址标签（memo）
+     * @apiSuccess {String} data.list.assetCode 交易资产缩写
+     * @apiSuccess {BigDecimal} data.list.assetAmt 金额
+     * @apiSuccess {BigDecimal} data.list.txFees 交易手续费
+     * @apiSuccess {String} data.list.feeToken 交易手续费币种
+     * @apiSuccess {BigDecimal} data.list.platformFee 平台代理手续费
+     * @apiSuccess {String} data.list.channel 交易渠道
+     * @apiSuccess {String} data.list.txNetwork 交易网络
+     * @apiSuccess {String} data.list.blockHash 区块哈希
+     * @apiSuccess {String} data.list.blockHeight 区块高度
+     * @apiSuccess {String} data.list.category 交易子类型
      * <table><tr><th>类别</th><th>描述</th></tr>
      * <tr><td>01</td><td>手续费</td></tr>
      * <tr><td>02</td><td>资金划转</td></tr>
      * <tr><td>03</td><td>创建地址</td></tr>
      * <tr><td>04</td><td>服务费</td></tr></table>
-     * @apiSuccess {String} data.bindSerialNumber 关联流水号，产生手续费时原内部流水号
-     * @apiSuccess {String} data.apiId API ID
-     * @apiSuccess {String} data.lastUpdateTime 最后更新时间
-     * @apiSuccess {String} data.txRemark 交易备注，包含交易错误信息
-     * @apiSuccess {String} data.nounce 包括nounce在内的提现预留信息
+     * @apiSuccess {String} data.list.bindSerialNumber 关联流水号，产生手续费时原内部流水号
+     * @apiSuccess {String} data.list.apiId API ID
+     * @apiSuccess {String} data.list.lastUpdateTime 最后更新时间
+     * @apiSuccess {String} data.list.txRemark 交易备注，包含交易错误信息
+     * @apiSuccess {String} data.list.nounce 包括nounce在内的提现预留信息
      */
     public ServiceCall<BaseResponse.TransactionsResponse> transactions(TransactionRequest transactionRequest) {
         String[] pathSegments = {BASE_URL, "getTransactionList"};
@@ -412,6 +419,10 @@ public class DaexWalletApiClient extends DaexClient {
      * <tr><td>01</td><td>单个</td></tr>
      * <tr><td>02</td><td>批量</td></tr></table>
      * @apiParam {Integer{50-1000}} [addressCount]   创建的地址数量(mode=01不需填写，mode=02必须填写)
+     * @apiParam {String=01, 02} [paymentType=1] 支付方式
+     * <table><tr><th>地址生成方式</th><th>描述</th></tr>
+     * <tr><td>01</td><td>使用已有额度支付</td></tr>
+     * <tr><td>02</td><td>超过额度后使用DAX支付</td></tr></table>
      * @apiParamExample {json} Request-Example:
      * {
      *     "account":"yu***un@daex.io",
@@ -427,6 +438,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {BigDecimal} data.cost 创建费用，消耗的DAX数量
      * @apiSuccess {String} data.assetCode 资产类型,币种缩写（如：BTC）
      * @apiSuccess {Integer} data.addressCount 新建的地址数量
+     * @apiSuccess {Integer} data.usableQuota 剩余可用额度
      * @apiSuccess {List} data.addressData 地址信息列表
      * @apiSuccess {String} data.addressData.address 新增地址
      * @apiSuccess {String} data.addressData.memo 地址标签（memo）
@@ -440,6 +452,7 @@ public class DaexWalletApiClient extends DaexClient {
      *         "accountBalance":12860.0000000000,
      *         "cost":0,
      *         "assetCode":"dax",
+     *         "addressCount":1,
      *         "addressCount":1,
      *         "addressData":[
      *              {
@@ -651,87 +664,92 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {String} status 请求返回状态
      * @apiSuccess {String} message 请求返回提示信息
      * @apiSuccess {List} data 请求返回信息
-     * @apiSuccess {String} data.internalOrderNumber 交易流水号
-     * @apiSuccess {String} data.externalOrderNumber 外部流水号
-     * @apiSuccess {String} data.status 交易状态
+     * @apiSuccess {Integer} data.totalCount 清单总数
+     * @apiSuccess {Object} data.list 清单列表
+     * @apiSuccess {String} data.list.internalOrderNumber 交易流水号
+     * @apiSuccess {String} data.list.externalOrderNumber 外部流水号
+     * @apiSuccess {String} data.list.status 交易状态
      * <table><tr><th>交易状态</th><th>描述</th></tr>
      * <tr><td>01</td><td>交易完成</td></tr>
      * <tr><td>02</td><td>交易待处理</td></tr>
      * <tr><td>03</td><td>交易失败</td></tr>
      * <tr><td>04</td><td>提现待确认</td></tr>
      * <tr><td>05</td><td>提现撤销</td></tr></table>
-     * @apiSuccess {Integer} data.txType 交易类型
+     * @apiSuccess {Integer} data.list.txType 交易类型
      * <table><tr><th>交易类型</th><th>描述</th></tr>
      * <tr><td>1</td><td>充值</td></tr>
      * <tr><td>2</td><td>提现</td></tr>
      * <tr><td>3</td><td>转账</td></tr></table>
-     * @apiSuccess {Integer} data.fundFlow 资金流向
+     * @apiSuccess {Integer} data.list.fundFlow 资金流向
      * <table><tr><th>资金流向</th><th>描述</th></tr>
      * <tr><td>1</td><td>收入</td></tr>
      * <tr><td>2</td><td>支出</td></tr></table>
-     * @apiSuccess {String} data.txTime 交易申请时间（格式：yyyy-MM-dd HH:mm:ss）
-     * @apiSuccess {String} data.txCompletionTime 交易完成时间（格式：yyyy-MM-dd HH:mm:ss）
-     * @apiSuccess {String} data.txHash 交易哈希
-     * @apiSuccess {String} data.senderAccount 出账账户
-     * @apiSuccess {String} data.recipientsAccount 入账账户
-     * @apiSuccess {String} data.sender 出账地址
-     * @apiSuccess {String} data.recipients 入账地址
-     * @apiSuccess {String} data.memo 入账地址标签（memo）
-     * @apiSuccess {String} data.assetCode 交易资产缩写
-     * @apiSuccess {BigDecimal} data.assetAmt 金额
-     * @apiSuccess {BigDecimal} data.txFees 交易手续费
-     * @apiSuccess {String} data.feeToken 交易手续费币种
-     * @apiSuccess {BigDecimal} data.platformFee 平台代理手续费
-     * @apiSuccess {String} data.channel 交易渠道
-     * @apiSuccess {String} data.txNetwork 交易网络
-     * @apiSuccess {String} data.blockHash 区块哈希
-     * @apiSuccess {String} data.blockHeight 区块高度
-     * @apiSuccess {String} data.category 交易子类型
+     * @apiSuccess {String} data.list.txTime 交易申请时间（格式：yyyy-MM-dd HH:mm:ss）
+     * @apiSuccess {String} data.list.txCompletionTime 交易完成时间（格式：yyyy-MM-dd HH:mm:ss）
+     * @apiSuccess {String} data.list.txHash 交易哈希
+     * @apiSuccess {String} data.list.senderAccount 出账账户
+     * @apiSuccess {String} data.list.recipientsAccount 入账账户
+     * @apiSuccess {String} data.list.sender 出账地址
+     * @apiSuccess {String} data.list.recipients 入账地址
+     * @apiSuccess {String} data.list.memo 入账地址标签（memo）
+     * @apiSuccess {String} data.list.assetCode 交易资产缩写
+     * @apiSuccess {BigDecimal} data.list.assetAmt 金额
+     * @apiSuccess {BigDecimal} data.list.txFees 交易手续费
+     * @apiSuccess {String} data.list.feeToken 交易手续费币种
+     * @apiSuccess {BigDecimal} data.list.platformFee 平台代理手续费
+     * @apiSuccess {String} data.list.channel 交易渠道
+     * @apiSuccess {String} data.list.txNetwork 交易网络
+     * @apiSuccess {String} data.list.blockHash 区块哈希
+     * @apiSuccess {String} data.list.blockHeight 区块高度
+     * @apiSuccess {String} data.list.category 交易子类型
      * <table><tr><th>类别</th><th>描述</th></tr>
      * <tr><td>01</td><td>手续费</td></tr>
      * <tr><td>02</td><td>资金划转</td></tr>
      * <tr><td>03</td><td>创建地址</td></tr>
      * <tr><td>04</td><td>服务费</td></tr></table>
-     * @apiSuccess {String} data.bindSerialNumber 关联流水号，产生手续费时原内部流水号
-     * @apiSuccess {String} data.apiId API ID
-     * @apiSuccess {String} data.lastUpdateTime 最后更新时间
-     * @apiSuccess {String} data.txRemark 交易备注，包含交易错误信息
-     * @apiSuccess {String} data.nounce 包括nounce在内的提现预留信息
+     * @apiSuccess {String} data.list.bindSerialNumber 关联流水号，产生手续费时原内部流水号
+     * @apiSuccess {String} data.list.apiId API ID
+     * @apiSuccess {String} data.list.lastUpdateTime 最后更新时间
+     * @apiSuccess {String} data.list.txRemark 交易备注，包含交易错误信息
+     * @apiSuccess {String} data.list.nounce 包括nounce在内的提现预留信息
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
      *     "status":"00000",
      *     "message":"成功",
-     *     "data": [
-     *          {
-     *              "internalOrderNumber":"102154201348605661918377",
-     *              "externalOrderNumber":"wb1234569",
-     *              "status":"01",
-     *              "txType":3,
-     *              "fundFlow":2,
-     *              "txTime":"2018-11-12 17:04:46",
-     *              "txCompletionTime":"2018-11-12 17:04:46",
-     *              "senderAccount":"admin123",
-     *              "recipientsAccount":"DAVIS",
-     *              "sender":"",
-     *              "recipients":"",
-     *              "memo":"",
-     *              "assetCode":"DAX",
-     *              "assetAmt":10.0000000000,
-     *              "handlingFee":0E-10,
-     *              "feeToken":"DAX",
-     *              "txFees":0E-10,
-     *              "channel":"API",
-     *              "txNetwork":"",
-     *              "blockHash":"",
-     *              "blockHeight":"",
-     *              "category":"",
-     *              "apiId":"00f9011f-***-d1290d0bf8a7",
-     *              "lastUpdateTime":"2018-11-12 17:04:46",
-     *              "txRemark":"",
-     *              "nounce":""
-     *          }
-     *     ]
+     *     "data": {
+     *          "totalCount"：1,
+     *          "list":[
+     *              {
+     *                  "internalOrderNumber":"102154201348605661918377",
+     *                  "externalOrderNumber":"wb1234569",
+     *                  "status":"01",
+     *                  "txType":3,
+     *                  "fundFlow":2,
+     *                  "txTime":"2018-11-12 17:04:46",
+     *                  "txCompletionTime":"2018-11-12 17:04:46",
+     *                  "senderAccount":"admin123",
+     *                  "recipientsAccount":"DAVIS",
+     *                  "sender":"",
+     *                  "recipients":"",
+     *                  "memo":"",
+     *                  "assetCode":"DAX",
+     *                  "assetAmt":10.0000000000,
+     *                  "handlingFee":0E-10,
+     *                  "feeToken":"DAX",
+     *                  "txFees":0E-10,
+     *                  "channel":"API",
+     *                  "txNetwork":"",
+     *                  "blockHash":"",
+     *                  "blockHeight":"",
+     *                  "category":"",
+     *                  "apiId":"00f9011f-***-d1290d0bf8a7",
+     *                  "lastUpdateTime":"2018-11-12 17:04:46",
+     *                  "txRemark":"",
+     *                  "nounce":""
+     *              }
+     *          ]
+     *     }
      * }
      */
 

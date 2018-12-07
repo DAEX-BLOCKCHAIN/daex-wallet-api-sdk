@@ -44,7 +44,7 @@ public class BaseResponse<T> implements ObjectModel {
 
     public static class BalancesResponse extends BaseResponse<Balance> {}
 
-    public static class TransactionsResponse extends BaseResponse<List<Transaction>> {}
+    public static class TransactionsResponse extends BaseResponse<Transactions> {}
 
     public static class TransferResponse extends BaseResponse<ResultData<Transfer>> {}
 
