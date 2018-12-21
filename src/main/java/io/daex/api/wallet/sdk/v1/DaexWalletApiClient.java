@@ -32,10 +32,10 @@ public class DaexWalletApiClient extends DaexClient {
      * <tr><td>01</td><td>单个</td></tr>
      * <tr><td>02</td><td>批量</td></tr></table>
      * @apiParam {Integer{50-1000}} [addressCount]   创建的地址数量(mode=01不需填写，mode=02必须填写)
-     * @apiParam {String=01, 02} [paymentType=1] 支付方式
-     * <table><tr><th>地址生成方式</th><th>描述</th></tr>
-     * <tr><td>01</td><td>使用已有额度支付</td></tr>
-     * <tr><td>02</td><td>超过额度后使用DAX支付</td></tr></table>
+     * @apiParam {String=01, 02} [paymentType=01] 支付方式
+     * <table><tr><th>支付方式</th><th>描述</th></tr>
+     * <tr><td>01</td><td>使用可用地址额度支付，超过额度时地址创建失败</td></tr>
+     * <tr><td>02</td><td>使用可用地址额度支付，超过的数量使用DAX支付</td></tr></table>
      * @apiSuccess {String} status 请求返回状态
      * @apiSuccess {String} message 请求返回提示信息
      * @apiSuccess {Object} data 请求返回信息
@@ -44,7 +44,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {BigDecimal} data.cost 创建费用，消耗的DAX数量
      * @apiSuccess {String} data.assetCode 资产类型,币种缩写（如：BTC）
      * @apiSuccess {Integer} data.addressCount 新建的地址数量
-     * @apiSuccess {Integer} data.usableQuota 剩余可用额度
+     * @apiSuccess {Integer} data.usableQuota 剩余可用地址数量
      * @apiSuccess {List} data.addressData 地址信息列表
      * @apiSuccess {String} data.addressData.address 新增地址
      * @apiSuccess {String} data.addressData.memo 地址标签（memo）
@@ -144,7 +144,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {String} data.apiId API ID
      * @apiSuccess {String} data.lastUpdateTime 最后更新时间
      * @apiSuccess {String} data.txRemark 交易备注，包含交易错误信息
-     * @apiSuccess {String} data.nounce 包括nounce在内的提现预留信息
+     * @apiSuccess {String} data.nonce 包括nonce在内的提现预留信息
      */
     public ServiceCall<BaseResponse.TransactionResponse> transaction(TransactionRequest transactionRequest) {
         String[] pathSegments = {BASE_URL, "getTransaction"};
@@ -224,7 +224,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {String} data.list.apiId API ID
      * @apiSuccess {String} data.list.lastUpdateTime 最后更新时间
      * @apiSuccess {String} data.list.txRemark 交易备注，包含交易错误信息
-     * @apiSuccess {String} data.list.nounce 包括nounce在内的提现预留信息
+     * @apiSuccess {String} data.list.nonce 包括nonce在内的提现预留信息
      */
     public ServiceCall<BaseResponse.TransactionsResponse> transactions(TransactionRequest transactionRequest) {
         String[] pathSegments = {BASE_URL, "getTransactionList"};
@@ -419,10 +419,10 @@ public class DaexWalletApiClient extends DaexClient {
      * <tr><td>01</td><td>单个</td></tr>
      * <tr><td>02</td><td>批量</td></tr></table>
      * @apiParam {Integer{50-1000}} [addressCount]   创建的地址数量(mode=01不需填写，mode=02必须填写)
-     * @apiParam {String=01, 02} [paymentType=1] 支付方式
-     * <table><tr><th>地址生成方式</th><th>描述</th></tr>
-     * <tr><td>01</td><td>使用已有额度支付</td></tr>
-     * <tr><td>02</td><td>超过额度后使用DAX支付</td></tr></table>
+     * @apiParam {String=01, 02} [paymentType=01] 支付方式
+     * <table><tr><th>支付方式</th><th>描述</th></tr>
+     * <tr><td>01</td><td>使用可用地址额度支付，超过额度时地址创建失败</td></tr>
+     * <tr><td>02</td><td>使用可用地址额度支付，超过的数量使用DAX支付</td></tr></table>
      * @apiParamExample {json} Request-Example:
      * {
      *     "account":"yu***un@daex.io",
@@ -438,7 +438,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {BigDecimal} data.cost 创建费用，消耗的DAX数量
      * @apiSuccess {String} data.assetCode 资产类型,币种缩写（如：BTC）
      * @apiSuccess {Integer} data.addressCount 新建的地址数量
-     * @apiSuccess {Integer} data.usableQuota 剩余可用额度
+     * @apiSuccess {Integer} data.usableQuota 剩余可用地址数量
      * @apiSuccess {List} data.addressData 地址信息列表
      * @apiSuccess {String} data.addressData.address 新增地址
      * @apiSuccess {String} data.addressData.memo 地址标签（memo）
@@ -590,7 +590,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {String} data.apiId API ID
      * @apiSuccess {String} data.lastUpdateTime 最后更新时间
      * @apiSuccess {String} data.txRemark 交易备注，包含交易错误信息
-     * @apiSuccess {String} data.nounce 包括nounce在内的提现预留信息
+     * @apiSuccess {String} data.nonce 包括nonce在内的提现预留信息
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -623,7 +623,7 @@ public class DaexWalletApiClient extends DaexClient {
      *              "apiId":"00f9011f-***-d1290d0bf8a7",
      *              "lastUpdateTime":"2018-11-12 17:04:46",
      *              "txRemark":"",
-     *              "nounce":""
+     *              "nonce":""
      *          }
      *     ]
      * }
@@ -711,7 +711,7 @@ public class DaexWalletApiClient extends DaexClient {
      * @apiSuccess {String} data.list.apiId API ID
      * @apiSuccess {String} data.list.lastUpdateTime 最后更新时间
      * @apiSuccess {String} data.list.txRemark 交易备注，包含交易错误信息
-     * @apiSuccess {String} data.list.nounce 包括nounce在内的提现预留信息
+     * @apiSuccess {String} data.list.nonce 包括nonce在内的提现预留信息
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -746,7 +746,7 @@ public class DaexWalletApiClient extends DaexClient {
      *                  "apiId":"00f9011f-***-d1290d0bf8a7",
      *                  "lastUpdateTime":"2018-11-12 17:04:46",
      *                  "txRemark":"",
-     *                  "nounce":""
+     *                  "nonce":""
      *              }
      *          ]
      *     }

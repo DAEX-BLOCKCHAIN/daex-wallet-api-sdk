@@ -121,14 +121,14 @@ public class Transaction implements Serializable {
     /**
      * 提现预留
      */
-    private String nounce;
+    private String nonce;
 
-    public String getNounce() {
-        return nounce;
+    public String getNonce() {
+        return nonce;
     }
 
-    public void setNounce(String nounce) {
-        this.nounce = nounce;
+    public void setNonce(String nonce) {
+        this.nonce = nonce;
     }
 
     public String getInternalOrderNumber() {
